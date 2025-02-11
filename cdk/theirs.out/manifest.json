@@ -1,0 +1,605 @@
+{
+  "version": "39.0.0",
+  "artifacts": {
+    "CdkStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "CdkStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "CdkStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/us-east-1",
+      "properties": {
+        "templateFile": "CdkStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1/0c0ea426dd20bdc030b05c4fc38de0080dbe9e478b45cb51874652e14c6b0c62.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "CdkStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "CdkStack.assets"
+      ],
+      "metadata": {
+        "/CdkStack/NextJs/NextjsStaticAssets/Bucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsStaticAssetsBucketA3847FEE"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsStaticAssets/Bucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsStaticAssetsBucketPolicy774F83C2"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsStaticAssets/Bucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsStaticAssetsBucketAutoDeleteObjectsCustomResourceC73ADC4D"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpc9CFBA973"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet1Subnet573B8734"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet1RouteTable12CDC5FB"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet1RouteTableAssociationD72F0E51"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet1DefaultRouteBED4748F"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet1EIP44177157"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet1NATGateway3EB6E3AF"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet2SubnetCFB7DE52"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet2RouteTable9FB82F26"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet2RouteTableAssociationC7F9E9D9"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet2DefaultRouteD072A4A0"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet2EIP73163638"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPublicSubnet2NATGateway361F8EA5"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateWithEgressSubnet1Subnet5B3FAF3A"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateWithEgressSubnet1RouteTable4A86D4E1"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateWithEgressSubnet1RouteTableAssociation2A23C726"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateWithEgressSubnet1DefaultRoute09F68D41"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateWithEgressSubnet2SubnetD5C2942D"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateWithEgressSubnet2RouteTable146B6A9F"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateWithEgressSubnet2RouteTableAssociation6E40C06E"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateWithEgressSubnet2DefaultRoute4DE98093"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateIsolatedSubnet1SubnetEAE5A97B"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateIsolatedSubnet1RouteTable88322598"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateIsolatedSubnet1RouteTableAssociation2BBC9A15"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateIsolatedSubnet2SubnetB5BABF7F"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateIsolatedSubnet2RouteTable671CC8BE"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcPrivateIsolatedSubnet2RouteTableAssociation6AF69EEF"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcIGW37829383"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcVPCGW2F768CD2"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/RestrictDefaultSecurityGroupCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcRestrictDefaultSecurityGroupCustomResource1E3AB070"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/SqsInterfaceEndpoint/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcSqsInterfaceEndpointSecurityGroup8272B7DF"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsVpc/Vpc/SqsInterfaceEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsVpcSqsInterfaceEndpoint7F45D630"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFileSystem/FileSystem/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFileSystemF101088C"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFileSystemEfsSecurityGroup4FEF6FC4"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsSecurityGroup/from CdkStackNextJsNextjsAssetsDeploymentFnSecurityGroupE7A60B5E:2049": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFileSystemEfsSecurityGroupfromCdkStackNextJsNextjsAssetsDeploymentFnSecurityGroupE7A60B5E2049F343EFB6"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsSecurityGroup/from CdkStackNextJsNextjsFunctionsSecurityGroupCD4ABD8A:2049": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFileSystemEfsSecurityGroupfromCdkStackNextJsNextjsFunctionsSecurityGroupCD4ABD8A20493989A87A"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsMountTarget-PrivateWithEgressSubnet1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFileSystemEfsMountTargetPrivateWithEgressSubnet17C2B4D7F"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsMountTarget-PrivateWithEgressSubnet2": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFileSystemEfsMountTargetPrivateWithEgressSubnet2389CF9C5"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFileSystem/AccessPoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFileSystemAccessPoint9C99A27E"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsAssetsDeployment/Fn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsAssetsDeploymentFnServiceRole112DE1E1"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsAssetsDeployment/Fn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsAssetsDeploymentFnServiceRoleDefaultPolicy1421F434"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsAssetsDeployment/Fn/SecurityGroup": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "Ignoring Egress rule since 'allowAllOutbound' is set to true; To add customized rules, set allowAllOutbound=false on the SecurityGroup [ack: @aws-cdk/aws-ec2:ipv4IgnoreEgressRule]",
+            "trace": [
+              "Annotations.addMessage (/home/alex/wvwgg/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/home/alex/wvwgg/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "SecurityGroup.addEgressRule (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/security-group.js:1:7618)",
+              "/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:1860",
+              "ReactiveList.forEachAndForever (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:5923)",
+              "/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:1821",
+              "ReactiveList.forEachAndForever (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:5923)",
+              "Connections.allowTo (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:1749)",
+              "DockerImageFunction.configureVpc (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-lambda/lib/function.js:1:25733)",
+              "new Function (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-lambda/lib/function.js:1:13414)",
+              "new DockerImageFunction (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-lambda/lib/image-function.js:1:1794)",
+              "NextjsAssetsDeployment.createFunction (/home/alex/wvwgg/node_modules/cdk-nextjs/src/nextjs-assets-deployment.ts:155:16)",
+              "new NextjsAssetsDeployment (/home/alex/wvwgg/node_modules/cdk-nextjs/src/nextjs-assets-deployment.ts:143:37)",
+              "NextjsGlobalFunctions.createNextjsAssetsDeployment (/home/alex/wvwgg/node_modules/cdk-nextjs/src/root-constructs/nextjs-global-functions.ts:144:12)",
+              "new NextjsGlobalFunctions (/home/alex/wvwgg/node_modules/cdk-nextjs/src/root-constructs/nextjs-global-functions.ts:102:40)",
+              "new CdkStack (/home/alex/wvwgg/cdk/lib/cdk-stack.ts:17:5)",
+              "<anonymous> (/home/alex/wvwgg/cdk/bin/cdk.ts:6:1)",
+              "ModuleJob.run (node:internal/modules/esm/module_job:271:25)",
+              "async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)",
+              "async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)"
+            ]
+          }
+        ],
+        "/CdkStack/NextJs/NextjsAssetsDeployment/Fn/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsAssetsDeploymentFnSecurityGroupA6A38A38"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsAssetsDeployment/Fn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsAssetsDeploymentFnAF5AAFC3"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsAssetsDeployment/CustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsAssetsDeploymentCustomResource3AFD6925"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFunctions/Functions/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFunctionsServiceRoleF0A9BA6F"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFunctions/Functions/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFunctionsServiceRoleDefaultPolicy67C77442"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFunctions/Functions/SecurityGroup": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "Ignoring Egress rule since 'allowAllOutbound' is set to true; To add customized rules, set allowAllOutbound=false on the SecurityGroup [ack: @aws-cdk/aws-ec2:ipv4IgnoreEgressRule]",
+            "trace": [
+              "Annotations.addMessage (/home/alex/wvwgg/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/home/alex/wvwgg/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "SecurityGroup.addEgressRule (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/security-group.js:1:7618)",
+              "/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:1860",
+              "ReactiveList.forEachAndForever (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:5923)",
+              "/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:1821",
+              "ReactiveList.forEachAndForever (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:5923)",
+              "Connections.allowTo (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-ec2/lib/connections.js:1:1749)",
+              "DockerImageFunction.configureVpc (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-lambda/lib/function.js:1:25733)",
+              "new Function (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-lambda/lib/function.js:1:13414)",
+              "new DockerImageFunction (/home/alex/wvwgg/node_modules/aws-cdk-lib/aws-lambda/lib/image-function.js:1:1794)",
+              "NextjsFunctions.createFunction (/home/alex/wvwgg/node_modules/cdk-nextjs/src/nextjs-compute/nextjs-functions.ts:56:16)",
+              "new NextjsFunctions (/home/alex/wvwgg/node_modules/cdk-nextjs/src/nextjs-compute/nextjs-functions.ts:38:26)",
+              "NextjsGlobalFunctions.createNextjsFunctions (/home/alex/wvwgg/node_modules/cdk-nextjs/src/root-constructs/nextjs-global-functions.ts:162:12)",
+              "new NextjsGlobalFunctions (/home/alex/wvwgg/node_modules/cdk-nextjs/src/root-constructs/nextjs-global-functions.ts:103:33)",
+              "new CdkStack (/home/alex/wvwgg/cdk/lib/cdk-stack.ts:17:5)",
+              "<anonymous> (/home/alex/wvwgg/cdk/bin/cdk.ts:6:1)",
+              "ModuleJob.run (node:internal/modules/esm/module_job:271:25)",
+              "async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:547:26)",
+              "async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)"
+            ]
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFunctions/Functions/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFunctionsSecurityGroup230FAC37"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFunctions/Functions/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFunctionsF517EFAF"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsFunctions/Functions/FunctionUrl/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsFunctionsFunctionUrlF1C526C0"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/CloudFrontFn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionCloudFrontFn49A4121E"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/StaticResponseHeadersPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionStaticResponseHeadersPolicyF8824198"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/DynamicCachePolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionDynamicCachePolicy2FDAA03F"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/DynamicResponseHeadersPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionDynamicResponseHeadersPolicy58A1CD96"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/ImageCachePolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionImageCachePolicy61B64FD0"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/ImageResponseHeadersPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionImageResponseHeadersPolicy0442288F"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/Distribution/Origin1/FunctionUrlOriginAccessControl/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionOrigin1FunctionUrlOriginAccessControlE6FFB132"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/Distribution/Origin1/InvokeFromApiForCdkStackNextJsNextjsDistributionOrigin17B8A5EDA": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionOrigin1InvokeFromApiForCdkStackNextJsNextjsDistributionOrigin17B8A5EDA1A84EE15"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/Distribution/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionCC78932F"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/Distribution/Origin2/S3OriginAccessControl/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionOrigin2S3OriginAccessControl305E48B2"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsDistribution/DistributionDomainName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsDistributionDistributionDomainName3EDFAAAD"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsRevalidation/Queue/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsRevalidationQueueB942E96C"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsRevalidation/Queue/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsRevalidationQueuePolicyB5ECA5CF"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsRevalidation/Fn/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsRevalidationFnServiceRole757C469F"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsRevalidation/Fn/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsRevalidationFnServiceRoleDefaultPolicyC7DC16A3"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsRevalidation/Fn/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsRevalidationFn78ADA0AB"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsRevalidation/Fn/SqsEventSource:CdkStackNextJsNextjsRevalidationQueue25F72F09/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsRevalidationFnSqsEventSourceCdkStackNextJsNextjsRevalidationQueue25F72F09C7677B94"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsInvalidation/AwsCR/Resource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsInvalidationAwsCR7EBB3CD8"
+          }
+        ],
+        "/CdkStack/NextJs/NextjsInvalidation/AwsCR/CustomResourcePolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "NextJsNextjsInvalidationAwsCRCustomResourcePolicyD006D5BE"
+          }
+        ],
+        "/CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/CdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/CdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+          }
+        ],
+        "/CdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E"
+          }
+        ],
+        "/CdkStack/AWS679f53fac002430cb0da5b7982bd2287": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-singleton",
+            "data": true
+          },
+          {
+            "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+            "data": 0
+          }
+        ],
+        "/CdkStack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ],
+        "/CdkStack/AWS679f53fac002430cb0da5b7982bd2287/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWS679f53fac002430cb0da5b7982bd22872D164C4C"
+          }
+        ],
+        "/CdkStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/CdkStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/CdkStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "CdkStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

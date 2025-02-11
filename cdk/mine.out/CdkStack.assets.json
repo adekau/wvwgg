@@ -1,0 +1,38 @@
+{
+  "version": "39.0.0",
+  "files": {
+    "04321546d83f70e1d52e794540ffc322af66ed07f80ddb2b653b0d55f0102736": {
+      "source": {
+        "path": "CdkStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1",
+          "objectKey": "04321546d83f70e1d52e794540ffc322af66ed07f80ddb2b653b0d55f0102736.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {
+    "29824281a36dc2144a128c014ccaf46cbbe64745fd5923364bfca6961a67ed36": {
+      "source": {
+        "directory": "asset.29824281a36dc2144a128c014ccaf46cbbe64745fd5923364bfca6961a67ed36",
+        "dockerBuildArgs": {
+          "BUILDER_IMAGE_TAG": "wvwgg/builder-c83f04f0b2ef0cb941de68ebc6ec22"
+        },
+        "dockerFile": "nextjs.Dockerfile"
+      },
+      "destinations": {
+        "current_account-us-east-1": {
+          "repositoryName": "cdk-hnb659fds-container-assets-${AWS::AccountId}-us-east-1",
+          "imageTag": "29824281a36dc2144a128c014ccaf46cbbe64745fd5923364bfca6961a67ed36",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-image-publishing-role-${AWS::AccountId}-us-east-1"
+        }
+      }
+    }
+  }
+}

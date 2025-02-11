@@ -1,0 +1,3613 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "CdkStack": {
+        "id": "CdkStack",
+        "path": "CdkStack",
+        "children": {
+          "NextJs": {
+            "id": "NextJs",
+            "path": "CdkStack/NextJs",
+            "children": {
+              "NextjsBuild": {
+                "id": "NextjsBuild",
+                "path": "CdkStack/NextJs/NextjsBuild",
+                "constructInfo": {
+                  "fqn": "cdk-nextjs.NextjsBuild",
+                  "version": "0.2.0"
+                }
+              },
+              "NextjsStaticAssets": {
+                "id": "NextjsStaticAssets",
+                "path": "CdkStack/NextJs/NextjsStaticAssets",
+                "children": {
+                  "Bucket": {
+                    "id": "Bucket",
+                    "path": "CdkStack/NextJs/NextjsStaticAssets/Bucket",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsStaticAssets/Bucket/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                          "aws:cdk:cloudformation:props": {
+                            "bucketEncryption": {
+                              "serverSideEncryptionConfiguration": [
+                                {
+                                  "serverSideEncryptionByDefault": {
+                                    "sseAlgorithm": "AES256"
+                                  }
+                                }
+                              ]
+                            },
+                            "publicAccessBlockConfiguration": {
+                              "blockPublicAcls": true,
+                              "blockPublicPolicy": true,
+                              "ignorePublicAcls": true,
+                              "restrictPublicBuckets": true
+                            },
+                            "tags": [
+                              {
+                                "key": "aws-cdk:auto-delete-objects",
+                                "value": "true"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "Policy": {
+                        "id": "Policy",
+                        "path": "CdkStack/NextJs/NextjsStaticAssets/Bucket/Policy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsStaticAssets/Bucket/Policy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                              "aws:cdk:cloudformation:props": {
+                                "bucket": {
+                                  "Ref": "NextJsNextjsStaticAssetsBucketA3847FEE"
+                                },
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "s3:*",
+                                      "Condition": {
+                                        "Bool": {
+                                          "aws:SecureTransport": "false"
+                                        }
+                                      },
+                                      "Effect": "Deny",
+                                      "Principal": {
+                                        "AWS": "*"
+                                      },
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Action": "s3:*",
+                                      "Condition": {
+                                        "NumericLessThan": {
+                                          "s3:TlsVersion": 1.2
+                                        }
+                                      },
+                                      "Effect": "Deny",
+                                      "Principal": {
+                                        "AWS": "*"
+                                      },
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Action": [
+                                        "s3:DeleteObject*",
+                                        "s3:GetBucket*",
+                                        "s3:List*",
+                                        "s3:PutBucketPolicy"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "AWS": {
+                                          "Fn::GetAtt": [
+                                            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                                            "Arn"
+                                          ]
+                                        }
+                                      },
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Action": "s3:GetObject",
+                                      "Condition": {
+                                        "StringEquals": {
+                                          "AWS:SourceArn": {
+                                            "Fn::Join": [
+                                              "",
+                                              [
+                                                "arn:",
+                                                {
+                                                  "Ref": "AWS::Partition"
+                                                },
+                                                ":cloudfront::",
+                                                {
+                                                  "Ref": "AWS::AccountId"
+                                                },
+                                                ":distribution/",
+                                                {
+                                                  "Ref": "NextJsNextjsDistributionCC78932F"
+                                                }
+                                              ]
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "Service": "cloudfront.amazonaws.com"
+                                      },
+                                      "Resource": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            {
+                                              "Fn::GetAtt": [
+                                                "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                                "Arn"
+                                              ]
+                                            },
+                                            "/*"
+                                          ]
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "AutoDeleteObjectsCustomResource": {
+                        "id": "AutoDeleteObjectsCustomResource",
+                        "path": "CdkStack/NextJs/NextjsStaticAssets/Bucket/AutoDeleteObjectsCustomResource",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "CdkStack/NextJs/NextjsStaticAssets/Bucket/AutoDeleteObjectsCustomResource/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "cdk-nextjs.NextjsStaticAssets",
+                  "version": "0.2.0"
+                }
+              },
+              "NextjsVpc": {
+                "id": "NextjsVpc",
+                "path": "CdkStack/NextJs/NextjsVpc",
+                "children": {
+                  "Vpc": {
+                    "id": "Vpc",
+                    "path": "CdkStack/NextJs/NextjsVpc/Vpc",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::VPC",
+                          "aws:cdk:cloudformation:props": {
+                            "cidrBlock": "10.0.0.0/16",
+                            "enableDnsHostnames": true,
+                            "enableDnsSupport": true,
+                            "instanceTenancy": "default",
+                            "tags": [
+                              {
+                                "key": "Name",
+                                "value": "CdkStack/NextJs/NextjsVpc/Vpc"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnVPC",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "PublicSubnet1": {
+                        "id": "PublicSubnet1",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1",
+                        "children": {
+                          "Subnet": {
+                            "id": "Subnet",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/Subnet",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                              "aws:cdk:cloudformation:props": {
+                                "availabilityZone": {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::GetAZs": ""
+                                    }
+                                  ]
+                                },
+                                "cidrBlock": "10.0.0.0/19",
+                                "mapPublicIpOnLaunch": true,
+                                "tags": [
+                                  {
+                                    "key": "aws-cdk:subnet-name",
+                                    "value": "Public"
+                                  },
+                                  {
+                                    "key": "aws-cdk:subnet-type",
+                                    "value": "Public"
+                                  },
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Acl": {
+                            "id": "Acl",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/Acl",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTable": {
+                            "id": "RouteTable",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/RouteTable",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                              "aws:cdk:cloudformation:props": {
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTableAssociation": {
+                            "id": "RouteTableAssociation",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/RouteTableAssociation",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                              "aws:cdk:cloudformation:props": {
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet1RouteTable12CDC5FB"
+                                },
+                                "subnetId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet1Subnet573B8734"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "DefaultRoute": {
+                            "id": "DefaultRoute",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/DefaultRoute",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                              "aws:cdk:cloudformation:props": {
+                                "destinationCidrBlock": "0.0.0.0/0",
+                                "gatewayId": {
+                                  "Ref": "NextJsNextjsVpcIGW37829383"
+                                },
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet1RouteTable12CDC5FB"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "EIP": {
+                            "id": "EIP",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/EIP",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                              "aws:cdk:cloudformation:props": {
+                                "domain": "vpc",
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "NATGateway": {
+                            "id": "NATGateway",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1/NATGateway",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                              "aws:cdk:cloudformation:props": {
+                                "allocationId": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsVpcPublicSubnet1EIP44177157",
+                                    "AllocationId"
+                                  ]
+                                },
+                                "subnetId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet1Subnet573B8734"
+                                },
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet1"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "PublicSubnet2": {
+                        "id": "PublicSubnet2",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2",
+                        "children": {
+                          "Subnet": {
+                            "id": "Subnet",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/Subnet",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                              "aws:cdk:cloudformation:props": {
+                                "availabilityZone": {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::GetAZs": ""
+                                    }
+                                  ]
+                                },
+                                "cidrBlock": "10.0.32.0/19",
+                                "mapPublicIpOnLaunch": true,
+                                "tags": [
+                                  {
+                                    "key": "aws-cdk:subnet-name",
+                                    "value": "Public"
+                                  },
+                                  {
+                                    "key": "aws-cdk:subnet-type",
+                                    "value": "Public"
+                                  },
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Acl": {
+                            "id": "Acl",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/Acl",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTable": {
+                            "id": "RouteTable",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/RouteTable",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                              "aws:cdk:cloudformation:props": {
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTableAssociation": {
+                            "id": "RouteTableAssociation",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/RouteTableAssociation",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                              "aws:cdk:cloudformation:props": {
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet2RouteTable9FB82F26"
+                                },
+                                "subnetId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet2SubnetCFB7DE52"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "DefaultRoute": {
+                            "id": "DefaultRoute",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/DefaultRoute",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                              "aws:cdk:cloudformation:props": {
+                                "destinationCidrBlock": "0.0.0.0/0",
+                                "gatewayId": {
+                                  "Ref": "NextJsNextjsVpcIGW37829383"
+                                },
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet2RouteTable9FB82F26"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "EIP": {
+                            "id": "EIP",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/EIP",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::EIP",
+                              "aws:cdk:cloudformation:props": {
+                                "domain": "vpc",
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnEIP",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "NATGateway": {
+                            "id": "NATGateway",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2/NATGateway",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::NatGateway",
+                              "aws:cdk:cloudformation:props": {
+                                "allocationId": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsVpcPublicSubnet2EIP73163638",
+                                    "AllocationId"
+                                  ]
+                                },
+                                "subnetId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet2SubnetCFB7DE52"
+                                },
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PublicSubnet2"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnNatGateway",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "PrivateWithEgressSubnet1": {
+                        "id": "PrivateWithEgressSubnet1",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1",
+                        "children": {
+                          "Subnet": {
+                            "id": "Subnet",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1/Subnet",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                              "aws:cdk:cloudformation:props": {
+                                "availabilityZone": {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::GetAZs": ""
+                                    }
+                                  ]
+                                },
+                                "cidrBlock": "10.0.64.0/19",
+                                "mapPublicIpOnLaunch": false,
+                                "tags": [
+                                  {
+                                    "key": "aws-cdk:subnet-name",
+                                    "value": "PrivateWithEgress"
+                                  },
+                                  {
+                                    "key": "aws-cdk:subnet-type",
+                                    "value": "Private"
+                                  },
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Acl": {
+                            "id": "Acl",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1/Acl",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTable": {
+                            "id": "RouteTable",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1/RouteTable",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                              "aws:cdk:cloudformation:props": {
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTableAssociation": {
+                            "id": "RouteTableAssociation",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1/RouteTableAssociation",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                              "aws:cdk:cloudformation:props": {
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet1RouteTable4A86D4E1"
+                                },
+                                "subnetId": {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet1Subnet5B3FAF3A"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "DefaultRoute": {
+                            "id": "DefaultRoute",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet1/DefaultRoute",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                              "aws:cdk:cloudformation:props": {
+                                "destinationCidrBlock": "0.0.0.0/0",
+                                "natGatewayId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet1NATGateway3EB6E3AF"
+                                },
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet1RouteTable4A86D4E1"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "PrivateWithEgressSubnet2": {
+                        "id": "PrivateWithEgressSubnet2",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2",
+                        "children": {
+                          "Subnet": {
+                            "id": "Subnet",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2/Subnet",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                              "aws:cdk:cloudformation:props": {
+                                "availabilityZone": {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::GetAZs": ""
+                                    }
+                                  ]
+                                },
+                                "cidrBlock": "10.0.96.0/19",
+                                "mapPublicIpOnLaunch": false,
+                                "tags": [
+                                  {
+                                    "key": "aws-cdk:subnet-name",
+                                    "value": "PrivateWithEgress"
+                                  },
+                                  {
+                                    "key": "aws-cdk:subnet-type",
+                                    "value": "Private"
+                                  },
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Acl": {
+                            "id": "Acl",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2/Acl",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTable": {
+                            "id": "RouteTable",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2/RouteTable",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                              "aws:cdk:cloudformation:props": {
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTableAssociation": {
+                            "id": "RouteTableAssociation",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2/RouteTableAssociation",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                              "aws:cdk:cloudformation:props": {
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet2RouteTable146B6A9F"
+                                },
+                                "subnetId": {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet2SubnetD5C2942D"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "DefaultRoute": {
+                            "id": "DefaultRoute",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateWithEgressSubnet2/DefaultRoute",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                              "aws:cdk:cloudformation:props": {
+                                "destinationCidrBlock": "0.0.0.0/0",
+                                "natGatewayId": {
+                                  "Ref": "NextJsNextjsVpcPublicSubnet2NATGateway361F8EA5"
+                                },
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet2RouteTable146B6A9F"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "PrivateIsolatedSubnet1": {
+                        "id": "PrivateIsolatedSubnet1",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1",
+                        "children": {
+                          "Subnet": {
+                            "id": "Subnet",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1/Subnet",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                              "aws:cdk:cloudformation:props": {
+                                "availabilityZone": {
+                                  "Fn::Select": [
+                                    0,
+                                    {
+                                      "Fn::GetAZs": ""
+                                    }
+                                  ]
+                                },
+                                "cidrBlock": "10.0.128.0/19",
+                                "mapPublicIpOnLaunch": false,
+                                "tags": [
+                                  {
+                                    "key": "aws-cdk:subnet-name",
+                                    "value": "PrivateIsolated"
+                                  },
+                                  {
+                                    "key": "aws-cdk:subnet-type",
+                                    "value": "Isolated"
+                                  },
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Acl": {
+                            "id": "Acl",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1/Acl",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTable": {
+                            "id": "RouteTable",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1/RouteTable",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                              "aws:cdk:cloudformation:props": {
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTableAssociation": {
+                            "id": "RouteTableAssociation",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet1/RouteTableAssociation",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                              "aws:cdk:cloudformation:props": {
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPrivateIsolatedSubnet1RouteTable88322598"
+                                },
+                                "subnetId": {
+                                  "Ref": "NextJsNextjsVpcPrivateIsolatedSubnet1SubnetEAE5A97B"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "PrivateIsolatedSubnet2": {
+                        "id": "PrivateIsolatedSubnet2",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2",
+                        "children": {
+                          "Subnet": {
+                            "id": "Subnet",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2/Subnet",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                              "aws:cdk:cloudformation:props": {
+                                "availabilityZone": {
+                                  "Fn::Select": [
+                                    1,
+                                    {
+                                      "Fn::GetAZs": ""
+                                    }
+                                  ]
+                                },
+                                "cidrBlock": "10.0.160.0/19",
+                                "mapPublicIpOnLaunch": false,
+                                "tags": [
+                                  {
+                                    "key": "aws-cdk:subnet-name",
+                                    "value": "PrivateIsolated"
+                                  },
+                                  {
+                                    "key": "aws-cdk:subnet-type",
+                                    "value": "Isolated"
+                                  },
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Acl": {
+                            "id": "Acl",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2/Acl",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTable": {
+                            "id": "RouteTable",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2/RouteTable",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                              "aws:cdk:cloudformation:props": {
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "RouteTableAssociation": {
+                            "id": "RouteTableAssociation",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/PrivateIsolatedSubnet2/RouteTableAssociation",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                              "aws:cdk:cloudformation:props": {
+                                "routeTableId": {
+                                  "Ref": "NextJsNextjsVpcPrivateIsolatedSubnet2RouteTable671CC8BE"
+                                },
+                                "subnetId": {
+                                  "Ref": "NextJsNextjsVpcPrivateIsolatedSubnet2SubnetB5BABF7F"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.PrivateSubnet",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "IGW": {
+                        "id": "IGW",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/IGW",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::InternetGateway",
+                          "aws:cdk:cloudformation:props": {
+                            "tags": [
+                              {
+                                "key": "Name",
+                                "value": "CdkStack/NextJs/NextjsVpc/Vpc"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnInternetGateway",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "VPCGW": {
+                        "id": "VPCGW",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/VPCGW",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::VPCGatewayAttachment",
+                          "aws:cdk:cloudformation:props": {
+                            "internetGatewayId": {
+                              "Ref": "NextJsNextjsVpcIGW37829383"
+                            },
+                            "vpcId": {
+                              "Ref": "NextJsNextjsVpc9CFBA973"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnVPCGatewayAttachment",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "RestrictDefaultSecurityGroupCustomResource": {
+                        "id": "RestrictDefaultSecurityGroupCustomResource",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/RestrictDefaultSecurityGroupCustomResource",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/RestrictDefaultSecurityGroupCustomResource/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "SqsInterfaceEndpoint": {
+                        "id": "SqsInterfaceEndpoint",
+                        "path": "CdkStack/NextJs/NextjsVpc/Vpc/SqsInterfaceEndpoint",
+                        "children": {
+                          "SecurityGroup": {
+                            "id": "SecurityGroup",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/SqsInterfaceEndpoint/SecurityGroup",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "CdkStack/NextJs/NextjsVpc/Vpc/SqsInterfaceEndpoint/SecurityGroup/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                                  "aws:cdk:cloudformation:props": {
+                                    "groupDescription": "CdkStack/NextJs/NextjsVpc/Vpc/SqsInterfaceEndpoint/SecurityGroup",
+                                    "securityGroupEgress": [
+                                      {
+                                        "cidrIp": "0.0.0.0/0",
+                                        "description": "Allow all outbound traffic by default",
+                                        "ipProtocol": "-1"
+                                      }
+                                    ],
+                                    "securityGroupIngress": [
+                                      {
+                                        "cidrIp": {
+                                          "Fn::GetAtt": [
+                                            "NextJsNextjsVpc9CFBA973",
+                                            "CidrBlock"
+                                          ]
+                                        },
+                                        "ipProtocol": "tcp",
+                                        "fromPort": 443,
+                                        "toPort": 443,
+                                        "description": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "from ",
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "NextJsNextjsVpc9CFBA973",
+                                                  "CidrBlock"
+                                                ]
+                                              },
+                                              ":443"
+                                            ]
+                                          ]
+                                        }
+                                      }
+                                    ],
+                                    "tags": [
+                                      {
+                                        "key": "Name",
+                                        "value": "CdkStack/NextJs/NextjsVpc/Vpc"
+                                      }
+                                    ],
+                                    "vpcId": {
+                                      "Ref": "NextJsNextjsVpc9CFBA973"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                                  "version": "2.177.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsVpc/Vpc/SqsInterfaceEndpoint/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::VPCEndpoint",
+                              "aws:cdk:cloudformation:props": {
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsVpc/Vpc"
+                                  }
+                                ],
+                                "privateDnsEnabled": true,
+                                "securityGroupIds": [
+                                  {
+                                    "Fn::GetAtt": [
+                                      "NextJsNextjsVpcSqsInterfaceEndpointSecurityGroup8272B7DF",
+                                      "GroupId"
+                                    ]
+                                  }
+                                ],
+                                "serviceName": "com.amazonaws.us-east-1.sqs",
+                                "subnetIds": [
+                                  {
+                                    "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet1Subnet5B3FAF3A"
+                                  },
+                                  {
+                                    "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet2SubnetD5C2942D"
+                                  }
+                                ],
+                                "vpcEndpointType": "Interface",
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnVPCEndpoint",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.InterfaceVpcEndpoint",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.Vpc",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "cdk-nextjs.NextjsVpc",
+                  "version": "0.2.0"
+                }
+              },
+              "NextjsFileSystem": {
+                "id": "NextjsFileSystem",
+                "path": "CdkStack/NextJs/NextjsFileSystem",
+                "children": {
+                  "FileSystem": {
+                    "id": "FileSystem",
+                    "path": "CdkStack/NextJs/NextjsFileSystem/FileSystem",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsFileSystem/FileSystem/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EFS::FileSystem",
+                          "aws:cdk:cloudformation:props": {
+                            "encrypted": true,
+                            "fileSystemPolicy": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "elasticfilesystem:ClientRootAccess",
+                                    "elasticfilesystem:ClientWrite"
+                                  ],
+                                  "Condition": {
+                                    "Bool": {
+                                      "elasticfilesystem:AccessedViaMountTarget": "true"
+                                    }
+                                  },
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "AWS": "*"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "lifecyclePolicies": [
+                              {
+                                "transitionToIa": "AFTER_30_DAYS"
+                              }
+                            ],
+                            "fileSystemTags": [
+                              {
+                                "key": "Name",
+                                "value": "CdkStack/NextJs/NextjsFileSystem/FileSystem"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_efs.CfnFileSystem",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "EfsSecurityGroup": {
+                        "id": "EfsSecurityGroup",
+                        "path": "CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsSecurityGroup",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsSecurityGroup/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                              "aws:cdk:cloudformation:props": {
+                                "groupDescription": "CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsSecurityGroup",
+                                "securityGroupEgress": [
+                                  {
+                                    "cidrIp": "0.0.0.0/0",
+                                    "description": "Allow all outbound traffic by default",
+                                    "ipProtocol": "-1"
+                                  }
+                                ],
+                                "tags": [
+                                  {
+                                    "key": "Name",
+                                    "value": "CdkStack/NextJs/NextjsFileSystem/FileSystem"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "from CdkStackNextJsNextjsAssetsDeploymentFnSecurityGroupE7A60B5E:2049": {
+                            "id": "from CdkStackNextJsNextjsAssetsDeploymentFnSecurityGroupE7A60B5E:2049",
+                            "path": "CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsSecurityGroup/from CdkStackNextJsNextjsAssetsDeploymentFnSecurityGroupE7A60B5E:2049",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
+                              "aws:cdk:cloudformation:props": {
+                                "description": "from CdkStackNextJsNextjsAssetsDeploymentFnSecurityGroupE7A60B5E:2049",
+                                "fromPort": 2049,
+                                "groupId": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsFileSystemEfsSecurityGroup4FEF6FC4",
+                                    "GroupId"
+                                  ]
+                                },
+                                "ipProtocol": "tcp",
+                                "sourceSecurityGroupId": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsAssetsDeploymentFnSecurityGroupA6A38A38",
+                                    "GroupId"
+                                  ]
+                                },
+                                "toPort": 2049
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroupIngress",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "from CdkStackNextJsNextjsFunctionsSecurityGroupCD4ABD8A:2049": {
+                            "id": "from CdkStackNextJsNextjsFunctionsSecurityGroupCD4ABD8A:2049",
+                            "path": "CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsSecurityGroup/from CdkStackNextJsNextjsFunctionsSecurityGroupCD4ABD8A:2049",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroupIngress",
+                              "aws:cdk:cloudformation:props": {
+                                "description": "from CdkStackNextJsNextjsFunctionsSecurityGroupCD4ABD8A:2049",
+                                "fromPort": 2049,
+                                "groupId": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsFileSystemEfsSecurityGroup4FEF6FC4",
+                                    "GroupId"
+                                  ]
+                                },
+                                "ipProtocol": "tcp",
+                                "sourceSecurityGroupId": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsFunctionsSecurityGroup230FAC37",
+                                    "GroupId"
+                                  ]
+                                },
+                                "toPort": 2049
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroupIngress",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "EfsMountTarget-PrivateWithEgressSubnet1": {
+                        "id": "EfsMountTarget-PrivateWithEgressSubnet1",
+                        "path": "CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsMountTarget-PrivateWithEgressSubnet1",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EFS::MountTarget",
+                          "aws:cdk:cloudformation:props": {
+                            "fileSystemId": {
+                              "Ref": "NextJsNextjsFileSystemF101088C"
+                            },
+                            "securityGroups": [
+                              {
+                                "Fn::GetAtt": [
+                                  "NextJsNextjsFileSystemEfsSecurityGroup4FEF6FC4",
+                                  "GroupId"
+                                ]
+                              }
+                            ],
+                            "subnetId": {
+                              "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet1Subnet5B3FAF3A"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_efs.CfnMountTarget",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "EfsMountTarget-PrivateWithEgressSubnet2": {
+                        "id": "EfsMountTarget-PrivateWithEgressSubnet2",
+                        "path": "CdkStack/NextJs/NextjsFileSystem/FileSystem/EfsMountTarget-PrivateWithEgressSubnet2",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EFS::MountTarget",
+                          "aws:cdk:cloudformation:props": {
+                            "fileSystemId": {
+                              "Ref": "NextJsNextjsFileSystemF101088C"
+                            },
+                            "securityGroups": [
+                              {
+                                "Fn::GetAtt": [
+                                  "NextJsNextjsFileSystemEfsSecurityGroup4FEF6FC4",
+                                  "GroupId"
+                                ]
+                              }
+                            ],
+                            "subnetId": {
+                              "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet2SubnetD5C2942D"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_efs.CfnMountTarget",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_efs.FileSystem",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "AccessPoint": {
+                    "id": "AccessPoint",
+                    "path": "CdkStack/NextJs/NextjsFileSystem/AccessPoint",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsFileSystem/AccessPoint/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EFS::AccessPoint",
+                          "aws:cdk:cloudformation:props": {
+                            "fileSystemId": {
+                              "Ref": "NextJsNextjsFileSystemF101088C"
+                            },
+                            "posixUser": {
+                              "uid": "1001",
+                              "gid": "1001"
+                            },
+                            "rootDirectory": {
+                              "creationInfo": {
+                                "ownerGid": "1001",
+                                "ownerUid": "1001",
+                                "permissions": "755"
+                              },
+                              "path": "/cdk-nextjs"
+                            },
+                            "accessPointTags": [
+                              {
+                                "key": "Name",
+                                "value": "CdkStack/NextJs/NextjsFileSystem/AccessPoint"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_efs.CfnAccessPoint",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_efs.AccessPoint",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "cdk-nextjs.NextjsFileSystem",
+                  "version": "0.2.0"
+                }
+              },
+              "NextjsAssetsDeployment": {
+                "id": "NextjsAssetsDeployment",
+                "path": "CdkStack/NextJs/NextjsAssetsDeployment",
+                "children": {
+                  "Fn": {
+                    "id": "Fn",
+                    "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn",
+                    "children": {
+                      "ServiceRole": {
+                        "id": "ServiceRole",
+                        "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/ServiceRole",
+                        "children": {
+                          "ImportServiceRole": {
+                            "id": "ImportServiceRole",
+                            "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/ServiceRole/ImportServiceRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/ServiceRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "Service": "lambda.amazonaws.com"
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "managedPolicyArns": [
+                                  {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                                      ]
+                                    ]
+                                  },
+                                  {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                                      ]
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/ServiceRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/ServiceRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": "elasticfilesystem:ClientMount",
+                                          "Condition": {
+                                            "StringEquals": {
+                                              "elasticfilesystem:AccessPointArn": {
+                                                "Fn::Join": [
+                                                  "",
+                                                  [
+                                                    "arn:aws:elasticfilesystem:us-east-1:",
+                                                    {
+                                                      "Ref": "AWS::AccountId"
+                                                    },
+                                                    ":access-point/",
+                                                    {
+                                                      "Ref": "NextJsNextjsFileSystemAccessPoint9C99A27E"
+                                                    }
+                                                  ]
+                                                ]
+                                              }
+                                            }
+                                          },
+                                          "Effect": "Allow",
+                                          "Resource": "*"
+                                        },
+                                        {
+                                          "Action": "elasticfilesystem:ClientWrite",
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::Join": [
+                                              "",
+                                              [
+                                                "arn:aws:elasticfilesystem:us-east-1:",
+                                                {
+                                                  "Ref": "AWS::AccountId"
+                                                },
+                                                ":file-system/",
+                                                {
+                                                  "Ref": "NextJsNextjsFileSystemF101088C"
+                                                }
+                                              ]
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          "Action": [
+                                            "s3:Abort*",
+                                            "s3:DeleteObject*",
+                                            "s3:GetBucket*",
+                                            "s3:GetObject*",
+                                            "s3:List*",
+                                            "s3:PutObject",
+                                            "s3:PutObjectLegalHold",
+                                            "s3:PutObjectRetention",
+                                            "s3:PutObjectTagging",
+                                            "s3:PutObjectVersionTagging"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": [
+                                            {
+                                              "Fn::GetAtt": [
+                                                "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                                "Arn"
+                                              ]
+                                            },
+                                            {
+                                              "Fn::Join": [
+                                                "",
+                                                [
+                                                  {
+                                                    "Fn::GetAtt": [
+                                                      "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                                      "Arn"
+                                                    ]
+                                                  },
+                                                  "/*"
+                                                ]
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "NextJsNextjsAssetsDeploymentFnServiceRoleDefaultPolicy1421F434",
+                                    "roles": [
+                                      {
+                                        "Ref": "NextJsNextjsAssetsDeploymentFnServiceRole112DE1E1"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.177.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "AssetImage": {
+                        "id": "AssetImage",
+                        "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/AssetImage",
+                        "children": {
+                          "Staging": {
+                            "id": "Staging",
+                            "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/AssetImage/Staging",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.AssetStaging",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Repository": {
+                            "id": "Repository",
+                            "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/AssetImage/Repository",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ecr.RepositoryBase",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ecr_assets.DockerImageAsset",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "SecurityGroup": {
+                        "id": "SecurityGroup",
+                        "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/SecurityGroup",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/SecurityGroup/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                              "aws:cdk:cloudformation:props": {
+                                "groupDescription": "Automatic security group for Lambda Function CdkStackNextJsNextjsAssetsDeploymentFn10C0E6BA",
+                                "securityGroupEgress": [
+                                  {
+                                    "cidrIp": "0.0.0.0/0",
+                                    "description": "Allow all outbound traffic by default",
+                                    "ipProtocol": "-1"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsAssetsDeployment/Fn/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                          "aws:cdk:cloudformation:props": {
+                            "architectures": [
+                              "x86_64"
+                            ],
+                            "code": {
+                              "imageUri": {
+                                "Fn::Sub": "${AWS::AccountId}.dkr.ecr.us-east-1.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-us-east-1:4a3a99c3974e08e250562d999817111b1f1d170c8c7b7a6896e3471837668257"
+                              }
+                            },
+                            "environment": {
+                              "variables": {
+                                "DEBUG": "1"
+                              }
+                            },
+                            "fileSystemConfigs": [
+                              {
+                                "arn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:aws:elasticfilesystem:us-east-1:",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":access-point/",
+                                      {
+                                        "Ref": "NextJsNextjsFileSystemAccessPoint9C99A27E"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                "localMountPath": "/mnt/cdk-nextjs"
+                              }
+                            ],
+                            "memorySize": 2048,
+                            "packageType": "Image",
+                            "role": {
+                              "Fn::GetAtt": [
+                                "NextJsNextjsAssetsDeploymentFnServiceRole112DE1E1",
+                                "Arn"
+                              ]
+                            },
+                            "timeout": 300,
+                            "vpcConfig": {
+                              "subnetIds": [
+                                {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet1Subnet5B3FAF3A"
+                                },
+                                {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet2SubnetD5C2942D"
+                                }
+                              ],
+                              "securityGroupIds": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsAssetsDeploymentFnSecurityGroupA6A38A38",
+                                    "GroupId"
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.DockerImageFunction",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "CustomResource": {
+                    "id": "CustomResource",
+                    "path": "CdkStack/NextJs/NextjsAssetsDeployment/CustomResource",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "CdkStack/NextJs/NextjsAssetsDeployment/CustomResource/Default",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CustomResource",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "cdk-nextjs.NextjsAssetsDeployment",
+                  "version": "0.2.0"
+                }
+              },
+              "NextjsFunctions": {
+                "id": "NextjsFunctions",
+                "path": "CdkStack/NextJs/NextjsFunctions",
+                "children": {
+                  "Functions": {
+                    "id": "Functions",
+                    "path": "CdkStack/NextJs/NextjsFunctions/Functions",
+                    "children": {
+                      "ServiceRole": {
+                        "id": "ServiceRole",
+                        "path": "CdkStack/NextJs/NextjsFunctions/Functions/ServiceRole",
+                        "children": {
+                          "ImportServiceRole": {
+                            "id": "ImportServiceRole",
+                            "path": "CdkStack/NextJs/NextjsFunctions/Functions/ServiceRole/ImportServiceRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsFunctions/Functions/ServiceRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "Service": "lambda.amazonaws.com"
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "managedPolicyArns": [
+                                  {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                                      ]
+                                    ]
+                                  },
+                                  {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                                      ]
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "CdkStack/NextJs/NextjsFunctions/Functions/ServiceRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "CdkStack/NextJs/NextjsFunctions/Functions/ServiceRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": "elasticfilesystem:ClientMount",
+                                          "Condition": {
+                                            "StringEquals": {
+                                              "elasticfilesystem:AccessPointArn": {
+                                                "Fn::Join": [
+                                                  "",
+                                                  [
+                                                    "arn:aws:elasticfilesystem:us-east-1:",
+                                                    {
+                                                      "Ref": "AWS::AccountId"
+                                                    },
+                                                    ":access-point/",
+                                                    {
+                                                      "Ref": "NextJsNextjsFileSystemAccessPoint9C99A27E"
+                                                    }
+                                                  ]
+                                                ]
+                                              }
+                                            }
+                                          },
+                                          "Effect": "Allow",
+                                          "Resource": "*"
+                                        },
+                                        {
+                                          "Action": "elasticfilesystem:ClientWrite",
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::Join": [
+                                              "",
+                                              [
+                                                "arn:aws:elasticfilesystem:us-east-1:",
+                                                {
+                                                  "Ref": "AWS::AccountId"
+                                                },
+                                                ":file-system/",
+                                                {
+                                                  "Ref": "NextJsNextjsFileSystemF101088C"
+                                                }
+                                              ]
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          "Action": [
+                                            "elasticfilesystem:ClientMount",
+                                            "elasticfilesystem:ClientWrite"
+                                          ],
+                                          "Condition": {
+                                            "Bool": {
+                                              "elasticfilesystem:AccessedViaMountTarget": "true"
+                                            }
+                                          },
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "NextJsNextjsFileSystemF101088C",
+                                              "Arn"
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          "Action": [
+                                            "sqs:GetQueueAttributes",
+                                            "sqs:GetQueueUrl",
+                                            "sqs:SendMessage"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "NextJsNextjsRevalidationQueueB942E96C",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "NextJsNextjsFunctionsServiceRoleDefaultPolicy67C77442",
+                                    "roles": [
+                                      {
+                                        "Ref": "NextJsNextjsFunctionsServiceRoleF0A9BA6F"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.177.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "AssetImage": {
+                        "id": "AssetImage",
+                        "path": "CdkStack/NextJs/NextjsFunctions/Functions/AssetImage",
+                        "children": {
+                          "Staging": {
+                            "id": "Staging",
+                            "path": "CdkStack/NextJs/NextjsFunctions/Functions/AssetImage/Staging",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.AssetStaging",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Repository": {
+                            "id": "Repository",
+                            "path": "CdkStack/NextJs/NextjsFunctions/Functions/AssetImage/Repository",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ecr.RepositoryBase",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ecr_assets.DockerImageAsset",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "SecurityGroup": {
+                        "id": "SecurityGroup",
+                        "path": "CdkStack/NextJs/NextjsFunctions/Functions/SecurityGroup",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsFunctions/Functions/SecurityGroup/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                              "aws:cdk:cloudformation:props": {
+                                "groupDescription": "Automatic security group for Lambda Function CdkStackNextJsNextjsFunctions05F9BF91",
+                                "securityGroupEgress": [
+                                  {
+                                    "cidrIp": "0.0.0.0/0",
+                                    "description": "Allow all outbound traffic by default",
+                                    "ipProtocol": "-1"
+                                  }
+                                ],
+                                "vpcId": {
+                                  "Ref": "NextJsNextjsVpc9CFBA973"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsFunctions/Functions/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                          "aws:cdk:cloudformation:props": {
+                            "architectures": [
+                              "x86_64"
+                            ],
+                            "code": {
+                              "imageUri": {
+                                "Fn::Sub": "${AWS::AccountId}.dkr.ecr.us-east-1.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-us-east-1:88e4b0b97e257e61ad683b6a5e7a9a1a219b827ffab974c9c35ec4ac61b9f471"
+                              }
+                            },
+                            "environment": {
+                              "variables": {
+                                "AWS_LWA_ENABLE_COMPRESSION": "true",
+                                "AWS_LWA_INVOKE_MODE": "response_stream",
+                                "AWS_LWA_READINESS_CHECK_PATH": "/api/health",
+                                "AWS_LWA_READINESS_CHECK_PORT": "3000",
+                                "READINESS_CHECK_PATH": "http://127.0.0.1:3000/api/health",
+                                "CDK_NEXTJS_QUEUE_URL": {
+                                  "Ref": "NextJsNextjsRevalidationQueueB942E96C"
+                                }
+                              }
+                            },
+                            "fileSystemConfigs": [
+                              {
+                                "arn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:aws:elasticfilesystem:us-east-1:",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":access-point/",
+                                      {
+                                        "Ref": "NextJsNextjsFileSystemAccessPoint9C99A27E"
+                                      }
+                                    ]
+                                  ]
+                                },
+                                "localMountPath": "/mnt/cdk-nextjs"
+                              }
+                            ],
+                            "imageConfig": {
+                              "command": [
+                                "node",
+                                "server.js"
+                              ]
+                            },
+                            "memorySize": 2048,
+                            "packageType": "Image",
+                            "role": {
+                              "Fn::GetAtt": [
+                                "NextJsNextjsFunctionsServiceRoleF0A9BA6F",
+                                "Arn"
+                              ]
+                            },
+                            "timeout": 30,
+                            "vpcConfig": {
+                              "subnetIds": [
+                                {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet1Subnet5B3FAF3A"
+                                },
+                                {
+                                  "Ref": "NextJsNextjsVpcPrivateWithEgressSubnet2SubnetD5C2942D"
+                                }
+                              ],
+                              "securityGroupIds": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsFunctionsSecurityGroup230FAC37",
+                                    "GroupId"
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "FunctionUrl": {
+                        "id": "FunctionUrl",
+                        "path": "CdkStack/NextJs/NextjsFunctions/Functions/FunctionUrl",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsFunctions/Functions/FunctionUrl/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Url",
+                              "aws:cdk:cloudformation:props": {
+                                "authType": "AWS_IAM",
+                                "invokeMode": "RESPONSE_STREAM",
+                                "targetFunctionArn": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsFunctionsF517EFAF",
+                                    "Arn"
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnUrl",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_lambda.FunctionUrl",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.DockerImageFunction",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "cdk-nextjs.NextjsFunctions",
+                  "version": "0.2.0"
+                }
+              },
+              "NextjsDistribution": {
+                "id": "NextjsDistribution",
+                "path": "CdkStack/NextJs/NextjsDistribution",
+                "children": {
+                  "CloudFrontFn": {
+                    "id": "CloudFrontFn",
+                    "path": "CdkStack/NextJs/NextjsDistribution/CloudFrontFn",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsDistribution/CloudFrontFn/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudFront::Function",
+                          "aws:cdk:cloudformation:props": {
+                            "autoPublish": true,
+                            "functionCode": "\n          function handler(event) {\n            var request = event.request;\n            request.headers[\"x-forwarded-host\"] = request.headers.host;\n            return request;\n          }\n          ",
+                            "functionConfig": {
+                              "comment": "us-east-1CdkStackNextJsNetionCloudFrontFnB775491C",
+                              "runtime": "cloudfront-js-1.0"
+                            },
+                            "name": "us-east-1CdkStackNextJsNetionCloudFrontFnB775491C"
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnFunction",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cloudfront.Function",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "StaticResponseHeadersPolicy": {
+                    "id": "StaticResponseHeadersPolicy",
+                    "path": "CdkStack/NextJs/NextjsDistribution/StaticResponseHeadersPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsDistribution/StaticResponseHeadersPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudFront::ResponseHeadersPolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "responseHeadersPolicyConfig": {
+                              "name": "CdkStackNextJsNextjsDistributionStaticResponseHeadersPolicy239C7312",
+                              "comment": "Nextjs Static Response Headers Policy for CdkStack",
+                              "securityHeadersConfig": {
+                                "contentTypeOptions": {
+                                  "override": false
+                                },
+                                "frameOptions": {
+                                  "frameOption": "SAMEORIGIN",
+                                  "override": false
+                                },
+                                "referrerPolicy": {
+                                  "override": false,
+                                  "referrerPolicy": "strict-origin-when-cross-origin"
+                                },
+                                "strictTransportSecurity": {
+                                  "accessControlMaxAge": {
+                                    "amount": 365,
+                                    "unit": {
+                                      "label": "days",
+                                      "isoLabel": "D",
+                                      "inMillis": 86400000
+                                    }
+                                  },
+                                  "includeSubdomains": true,
+                                  "override": false,
+                                  "preload": true,
+                                  "accessControlMaxAgeSec": 31536000
+                                },
+                                "xssProtection": {
+                                  "override": false,
+                                  "protection": true,
+                                  "modeBlock": true
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnResponseHeadersPolicy",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicy",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "DynamicCachePolicy": {
+                    "id": "DynamicCachePolicy",
+                    "path": "CdkStack/NextJs/NextjsDistribution/DynamicCachePolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsDistribution/DynamicCachePolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudFront::CachePolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "cachePolicyConfig": {
+                              "name": "CdkStackNextJsNextjsDistributionDynamicCachePolicy674AA1A9-us-east-1",
+                              "comment": "Nextjs Dynamic Cache Policy for CdkStack",
+                              "minTtl": 0,
+                              "maxTtl": 31536000,
+                              "defaultTtl": 86400,
+                              "parametersInCacheKeyAndForwardedToOrigin": {
+                                "cookiesConfig": {
+                                  "cookieBehavior": "all"
+                                },
+                                "headersConfig": {
+                                  "headerBehavior": "whitelist",
+                                  "headers": [
+                                    "accept",
+                                    "rsc",
+                                    "next-router-prefetch",
+                                    "next-router-state-tree",
+                                    "next-url",
+                                    "x-prerender-revalidate"
+                                  ]
+                                },
+                                "enableAcceptEncodingGzip": true,
+                                "enableAcceptEncodingBrotli": true,
+                                "queryStringsConfig": {
+                                  "queryStringBehavior": "all"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnCachePolicy",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cloudfront.CachePolicy",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "DynamicResponseHeadersPolicy": {
+                    "id": "DynamicResponseHeadersPolicy",
+                    "path": "CdkStack/NextJs/NextjsDistribution/DynamicResponseHeadersPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsDistribution/DynamicResponseHeadersPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudFront::ResponseHeadersPolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "responseHeadersPolicyConfig": {
+                              "name": "CdkStackNextJsNextjsDistributionDynamicResponseHeadersPolicyA4AA93F5",
+                              "comment": "Nextjs Dynamic Response Headers Policy for CdkStack",
+                              "securityHeadersConfig": {
+                                "contentTypeOptions": {
+                                  "override": false
+                                },
+                                "frameOptions": {
+                                  "frameOption": "SAMEORIGIN",
+                                  "override": false
+                                },
+                                "referrerPolicy": {
+                                  "override": false,
+                                  "referrerPolicy": "strict-origin-when-cross-origin"
+                                },
+                                "strictTransportSecurity": {
+                                  "accessControlMaxAge": {
+                                    "amount": 365,
+                                    "unit": {
+                                      "label": "days",
+                                      "isoLabel": "D",
+                                      "inMillis": 86400000
+                                    }
+                                  },
+                                  "includeSubdomains": true,
+                                  "override": false,
+                                  "preload": true,
+                                  "accessControlMaxAgeSec": 31536000
+                                },
+                                "xssProtection": {
+                                  "override": false,
+                                  "protection": true,
+                                  "modeBlock": true
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnResponseHeadersPolicy",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicy",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "ImageCachePolicy": {
+                    "id": "ImageCachePolicy",
+                    "path": "CdkStack/NextJs/NextjsDistribution/ImageCachePolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsDistribution/ImageCachePolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudFront::CachePolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "cachePolicyConfig": {
+                              "name": "CdkStackNextJsNextjsDistributionImageCachePolicyCD4E1DAA-us-east-1",
+                              "comment": "Nextjs Image Cache Policy for CdkStack",
+                              "minTtl": 0,
+                              "maxTtl": 31536000,
+                              "defaultTtl": 86400,
+                              "parametersInCacheKeyAndForwardedToOrigin": {
+                                "cookiesConfig": {
+                                  "cookieBehavior": "none"
+                                },
+                                "headersConfig": {
+                                  "headerBehavior": "whitelist",
+                                  "headers": [
+                                    "accept"
+                                  ]
+                                },
+                                "enableAcceptEncodingGzip": true,
+                                "enableAcceptEncodingBrotli": true,
+                                "queryStringsConfig": {
+                                  "queryStringBehavior": "all"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnCachePolicy",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cloudfront.CachePolicy",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "ImageResponseHeadersPolicy": {
+                    "id": "ImageResponseHeadersPolicy",
+                    "path": "CdkStack/NextJs/NextjsDistribution/ImageResponseHeadersPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsDistribution/ImageResponseHeadersPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudFront::ResponseHeadersPolicy",
+                          "aws:cdk:cloudformation:props": {
+                            "responseHeadersPolicyConfig": {
+                              "name": "CdkStackNextJsNextjsDistributionImageResponseHeadersPolicy0B0B4399",
+                              "comment": "Nextjs Image Response Headers Policy for CdkStack",
+                              "securityHeadersConfig": {
+                                "contentTypeOptions": {
+                                  "override": false
+                                },
+                                "frameOptions": {
+                                  "frameOption": "SAMEORIGIN",
+                                  "override": false
+                                },
+                                "referrerPolicy": {
+                                  "override": false,
+                                  "referrerPolicy": "strict-origin-when-cross-origin"
+                                },
+                                "strictTransportSecurity": {
+                                  "accessControlMaxAge": {
+                                    "amount": 365,
+                                    "unit": {
+                                      "label": "days",
+                                      "isoLabel": "D",
+                                      "inMillis": 86400000
+                                    }
+                                  },
+                                  "includeSubdomains": true,
+                                  "override": false,
+                                  "preload": true,
+                                  "accessControlMaxAgeSec": 31536000
+                                },
+                                "xssProtection": {
+                                  "override": false,
+                                  "protection": true,
+                                  "modeBlock": true
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnResponseHeadersPolicy",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cloudfront.ResponseHeadersPolicy",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "Distribution": {
+                    "id": "Distribution",
+                    "path": "CdkStack/NextJs/NextjsDistribution/Distribution",
+                    "children": {
+                      "Origin1": {
+                        "id": "Origin1",
+                        "path": "CdkStack/NextJs/NextjsDistribution/Distribution/Origin1",
+                        "children": {
+                          "FunctionUrlOriginAccessControl": {
+                            "id": "FunctionUrlOriginAccessControl",
+                            "path": "CdkStack/NextJs/NextjsDistribution/Distribution/Origin1/FunctionUrlOriginAccessControl",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "CdkStack/NextJs/NextjsDistribution/Distribution/Origin1/FunctionUrlOriginAccessControl/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::CloudFront::OriginAccessControl",
+                                  "aws:cdk:cloudformation:props": {
+                                    "originAccessControlConfig": {
+                                      "name": "CdkStackNextJsNextjsDistribunctionUrlOriginAccessControlB35FEFF8",
+                                      "signingBehavior": "always",
+                                      "signingProtocol": "sigv4",
+                                      "originAccessControlOriginType": "lambda"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_cloudfront.CfnOriginAccessControl",
+                                  "version": "2.177.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_cloudfront.FunctionUrlOriginAccessControl",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "InvokeFromApiForCdkStackNextJsNextjsDistributionOrigin17B8A5EDA": {
+                            "id": "InvokeFromApiForCdkStackNextJsNextjsDistributionOrigin17B8A5EDA",
+                            "path": "CdkStack/NextJs/NextjsDistribution/Distribution/Origin1/InvokeFromApiForCdkStackNextJsNextjsDistributionOrigin17B8A5EDA",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunctionUrl",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsFunctionsFunctionUrlF1C526C0",
+                                    "FunctionArn"
+                                  ]
+                                },
+                                "principal": "cloudfront.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":cloudfront::",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":distribution/",
+                                      {
+                                        "Ref": "NextJsNextjsDistributionCC78932F"
+                                      }
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.4.2"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsDistribution/Distribution/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
+                          "aws:cdk:cloudformation:props": {
+                            "distributionConfig": {
+                              "enabled": true,
+                              "origins": [
+                                {
+                                  "domainName": {
+                                    "Fn::Select": [
+                                      2,
+                                      {
+                                        "Fn::Split": [
+                                          "/",
+                                          {
+                                            "Fn::GetAtt": [
+                                              "NextJsNextjsFunctionsFunctionUrlF1C526C0",
+                                              "FunctionUrl"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  },
+                                  "id": "CdkStackNextJsNextjsDistributionOrigin17B8A5EDA",
+                                  "customOriginConfig": {
+                                    "originSslProtocols": [
+                                      "TLSv1.2"
+                                    ],
+                                    "originProtocolPolicy": "https-only"
+                                  },
+                                  "originAccessControlId": {
+                                    "Fn::GetAtt": [
+                                      "NextJsNextjsDistributionOrigin1FunctionUrlOriginAccessControlE6FFB132",
+                                      "Id"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "domainName": {
+                                    "Fn::GetAtt": [
+                                      "NextJsNextjsStaticAssetsBucketA3847FEE",
+                                      "RegionalDomainName"
+                                    ]
+                                  },
+                                  "id": "CdkStackNextJsNextjsDistributionOrigin22157B9A1",
+                                  "s3OriginConfig": {
+                                    "originAccessIdentity": ""
+                                  },
+                                  "originAccessControlId": {
+                                    "Fn::GetAtt": [
+                                      "NextJsNextjsDistributionOrigin2S3OriginAccessControl305E48B2",
+                                      "Id"
+                                    ]
+                                  }
+                                }
+                              ],
+                              "defaultCacheBehavior": {
+                                "pathPattern": "*",
+                                "targetOriginId": "CdkStackNextJsNextjsDistributionOrigin17B8A5EDA",
+                                "allowedMethods": [
+                                  "GET",
+                                  "HEAD",
+                                  "OPTIONS",
+                                  "PUT",
+                                  "PATCH",
+                                  "POST",
+                                  "DELETE"
+                                ],
+                                "cachePolicyId": {
+                                  "Ref": "NextJsNextjsDistributionDynamicCachePolicy2FDAA03F"
+                                },
+                                "compress": true,
+                                "originRequestPolicyId": "b689b0a8-53d0-40ab-baf2-68738e2966ac",
+                                "responseHeadersPolicyId": {
+                                  "Ref": "NextJsNextjsDistributionDynamicResponseHeadersPolicy58A1CD96"
+                                },
+                                "viewerProtocolPolicy": "redirect-to-https",
+                                "functionAssociations": [
+                                  {
+                                    "functionArn": {
+                                      "Fn::GetAtt": [
+                                        "NextJsNextjsDistributionCloudFrontFn49A4121E",
+                                        "FunctionARN"
+                                      ]
+                                    },
+                                    "eventType": "viewer-request"
+                                  }
+                                ]
+                              },
+                              "cacheBehaviors": [
+                                {
+                                  "pathPattern": "_next/static*",
+                                  "targetOriginId": "CdkStackNextJsNextjsDistributionOrigin22157B9A1",
+                                  "allowedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                                  "compress": true,
+                                  "responseHeadersPolicyId": {
+                                    "Ref": "NextJsNextjsDistributionStaticResponseHeadersPolicyF8824198"
+                                  },
+                                  "viewerProtocolPolicy": "redirect-to-https"
+                                },
+                                {
+                                  "pathPattern": "file.svg",
+                                  "targetOriginId": "CdkStackNextJsNextjsDistributionOrigin22157B9A1",
+                                  "allowedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                                  "compress": true,
+                                  "responseHeadersPolicyId": {
+                                    "Ref": "NextJsNextjsDistributionStaticResponseHeadersPolicyF8824198"
+                                  },
+                                  "viewerProtocolPolicy": "redirect-to-https"
+                                },
+                                {
+                                  "pathPattern": "globe.svg",
+                                  "targetOriginId": "CdkStackNextJsNextjsDistributionOrigin22157B9A1",
+                                  "allowedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                                  "compress": true,
+                                  "responseHeadersPolicyId": {
+                                    "Ref": "NextJsNextjsDistributionStaticResponseHeadersPolicyF8824198"
+                                  },
+                                  "viewerProtocolPolicy": "redirect-to-https"
+                                },
+                                {
+                                  "pathPattern": "next.svg",
+                                  "targetOriginId": "CdkStackNextJsNextjsDistributionOrigin22157B9A1",
+                                  "allowedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                                  "compress": true,
+                                  "responseHeadersPolicyId": {
+                                    "Ref": "NextJsNextjsDistributionStaticResponseHeadersPolicyF8824198"
+                                  },
+                                  "viewerProtocolPolicy": "redirect-to-https"
+                                },
+                                {
+                                  "pathPattern": "vercel.svg",
+                                  "targetOriginId": "CdkStackNextJsNextjsDistributionOrigin22157B9A1",
+                                  "allowedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                                  "compress": true,
+                                  "responseHeadersPolicyId": {
+                                    "Ref": "NextJsNextjsDistributionStaticResponseHeadersPolicyF8824198"
+                                  },
+                                  "viewerProtocolPolicy": "redirect-to-https"
+                                },
+                                {
+                                  "pathPattern": "window.svg",
+                                  "targetOriginId": "CdkStackNextJsNextjsDistributionOrigin22157B9A1",
+                                  "allowedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                                  "compress": true,
+                                  "responseHeadersPolicyId": {
+                                    "Ref": "NextJsNextjsDistributionStaticResponseHeadersPolicyF8824198"
+                                  },
+                                  "viewerProtocolPolicy": "redirect-to-https"
+                                },
+                                {
+                                  "pathPattern": "_next/image*",
+                                  "targetOriginId": "CdkStackNextJsNextjsDistributionOrigin17B8A5EDA",
+                                  "allowedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachedMethods": [
+                                    "GET",
+                                    "HEAD",
+                                    "OPTIONS"
+                                  ],
+                                  "cachePolicyId": {
+                                    "Ref": "NextJsNextjsDistributionImageCachePolicy61B64FD0"
+                                  },
+                                  "compress": true,
+                                  "originRequestPolicyId": "b689b0a8-53d0-40ab-baf2-68738e2966ac",
+                                  "responseHeadersPolicyId": {
+                                    "Ref": "NextJsNextjsDistributionImageResponseHeadersPolicy0442288F"
+                                  },
+                                  "viewerProtocolPolicy": "redirect-to-https",
+                                  "functionAssociations": [
+                                    {
+                                      "functionArn": {
+                                        "Fn::GetAtt": [
+                                          "NextJsNextjsDistributionCloudFrontFn49A4121E",
+                                          "FunctionARN"
+                                        ]
+                                      },
+                                      "eventType": "viewer-request"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "comment": "cdk-nextjs Distribution for CdkStack",
+                              "httpVersion": "http2and3",
+                              "ipv6Enabled": true
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnDistribution",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "Origin2": {
+                        "id": "Origin2",
+                        "path": "CdkStack/NextJs/NextjsDistribution/Distribution/Origin2",
+                        "children": {
+                          "S3OriginAccessControl": {
+                            "id": "S3OriginAccessControl",
+                            "path": "CdkStack/NextJs/NextjsDistribution/Distribution/Origin2/S3OriginAccessControl",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "CdkStack/NextJs/NextjsDistribution/Distribution/Origin2/S3OriginAccessControl/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::CloudFront::OriginAccessControl",
+                                  "aws:cdk:cloudformation:props": {
+                                    "originAccessControlConfig": {
+                                      "name": "CdkStackNextJsNextjsDistribuOrigin2S3OriginAccessControl3C9B0FEC",
+                                      "signingBehavior": "always",
+                                      "signingProtocol": "sigv4",
+                                      "originAccessControlOriginType": "s3"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_cloudfront.CfnOriginAccessControl",
+                                  "version": "2.177.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_cloudfront.S3OriginAccessControl",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.4.2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cloudfront.Distribution",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "DistributionDomainName": {
+                    "id": "DistributionDomainName",
+                    "path": "CdkStack/NextJs/NextjsDistribution/DistributionDomainName",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnOutput",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "cdk-nextjs.NextjsDistribution",
+                  "version": "0.2.0"
+                }
+              },
+              "NextjsRevalidation": {
+                "id": "NextjsRevalidation",
+                "path": "CdkStack/NextJs/NextjsRevalidation",
+                "children": {
+                  "Queue": {
+                    "id": "Queue",
+                    "path": "CdkStack/NextJs/NextjsRevalidation/Queue",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsRevalidation/Queue/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::SQS::Queue",
+                          "aws:cdk:cloudformation:props": {
+                            "contentBasedDeduplication": true,
+                            "fifoQueue": true
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_sqs.CfnQueue",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "Policy": {
+                        "id": "Policy",
+                        "path": "CdkStack/NextJs/NextjsRevalidation/Queue/Policy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsRevalidation/Queue/Policy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::SQS::QueuePolicy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sqs:*",
+                                      "Condition": {
+                                        "Bool": {
+                                          "aws:SecureTransport": "false"
+                                        }
+                                      },
+                                      "Effect": "Deny",
+                                      "Principal": {
+                                        "AWS": "*"
+                                      },
+                                      "Resource": {
+                                        "Fn::GetAtt": [
+                                          "NextJsNextjsRevalidationQueueB942E96C",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "Sid": "DenyUnsecureTransport"
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "queues": [
+                                  {
+                                    "Ref": "NextJsNextjsRevalidationQueueB942E96C"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_sqs.CfnQueuePolicy",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_sqs.QueuePolicy",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_sqs.Queue",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "Fn": {
+                    "id": "Fn",
+                    "path": "CdkStack/NextJs/NextjsRevalidation/Fn",
+                    "children": {
+                      "ServiceRole": {
+                        "id": "ServiceRole",
+                        "path": "CdkStack/NextJs/NextjsRevalidation/Fn/ServiceRole",
+                        "children": {
+                          "ImportServiceRole": {
+                            "id": "ImportServiceRole",
+                            "path": "CdkStack/NextJs/NextjsRevalidation/Fn/ServiceRole/ImportServiceRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsRevalidation/Fn/ServiceRole/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "Service": "lambda.amazonaws.com"
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "managedPolicyArns": [
+                                  {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                                      ]
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "CdkStack/NextJs/NextjsRevalidation/Fn/ServiceRole/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "CdkStack/NextJs/NextjsRevalidation/Fn/ServiceRole/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "sqs:ChangeMessageVisibility",
+                                            "sqs:DeleteMessage",
+                                            "sqs:GetQueueAttributes",
+                                            "sqs:GetQueueUrl",
+                                            "sqs:ReceiveMessage"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::GetAtt": [
+                                              "NextJsNextjsRevalidationQueueB942E96C",
+                                              "Arn"
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "NextJsNextjsRevalidationFnServiceRoleDefaultPolicyC7DC16A3",
+                                    "roles": [
+                                      {
+                                        "Ref": "NextJsNextjsRevalidationFnServiceRole757C469F"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.177.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "Code": {
+                        "id": "Code",
+                        "path": "CdkStack/NextJs/NextjsRevalidation/Fn/Code",
+                        "children": {
+                          "Stage": {
+                            "id": "Stage",
+                            "path": "CdkStack/NextJs/NextjsRevalidation/Fn/Code/Stage",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.AssetStaging",
+                              "version": "2.177.0"
+                            }
+                          },
+                          "AssetBucket": {
+                            "id": "AssetBucket",
+                            "path": "CdkStack/NextJs/NextjsRevalidation/Fn/Code/AssetBucket",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsRevalidation/Fn/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                          "aws:cdk:cloudformation:props": {
+                            "code": {
+                              "s3Bucket": {
+                                "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+                              },
+                              "s3Key": "dff54f7a2b1453053e4c3eef734ecca53b43c745e604dd2cdfcfec1f8f7c0c7a.zip"
+                            },
+                            "description": "src/lambdas/revalidate/revalidate.lambda.ts",
+                            "environment": {
+                              "variables": {
+                                "PREVIEW_MODE_ID": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsAssetsDeploymentCustomResource3AFD6925",
+                                    "previewModeId"
+                                  ]
+                                }
+                              }
+                            },
+                            "handler": "index.handler",
+                            "role": {
+                              "Fn::GetAtt": [
+                                "NextJsNextjsRevalidationFnServiceRole757C469F",
+                                "Arn"
+                              ]
+                            },
+                            "runtime": "nodejs22.x",
+                            "timeout": 20
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "SqsEventSource:CdkStackNextJsNextjsRevalidationQueue25F72F09": {
+                        "id": "SqsEventSource:CdkStackNextJsNextjsRevalidationQueue25F72F09",
+                        "path": "CdkStack/NextJs/NextjsRevalidation/Fn/SqsEventSource:CdkStackNextJsNextjsRevalidationQueue25F72F09",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsRevalidation/Fn/SqsEventSource:CdkStackNextJsNextjsRevalidationQueue25F72F09/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::EventSourceMapping",
+                              "aws:cdk:cloudformation:props": {
+                                "eventSourceArn": {
+                                  "Fn::GetAtt": [
+                                    "NextJsNextjsRevalidationQueueB942E96C",
+                                    "Arn"
+                                  ]
+                                },
+                                "functionName": {
+                                  "Ref": "NextJsNextjsRevalidationFn78ADA0AB"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnEventSourceMapping",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_lambda.EventSourceMapping",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.Function",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "cdk-nextjs.NextjsRevalidation",
+                  "version": "0.2.0"
+                }
+              },
+              "NextjsInvalidation": {
+                "id": "NextjsInvalidation",
+                "path": "CdkStack/NextJs/NextjsInvalidation",
+                "children": {
+                  "AwsCR": {
+                    "id": "AwsCR",
+                    "path": "CdkStack/NextJs/NextjsInvalidation/AwsCR",
+                    "children": {
+                      "Provider": {
+                        "id": "Provider",
+                        "path": "CdkStack/NextJs/NextjsInvalidation/AwsCR/Provider",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_lambda.SingletonFunction",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "CdkStack/NextJs/NextjsInvalidation/AwsCR/Resource",
+                        "children": {
+                          "Default": {
+                            "id": "Default",
+                            "path": "CdkStack/NextJs/NextjsInvalidation/AwsCR/Resource/Default",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.CfnResource",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CustomResource",
+                          "version": "2.177.0"
+                        }
+                      },
+                      "CustomResourcePolicy": {
+                        "id": "CustomResourcePolicy",
+                        "path": "CdkStack/NextJs/NextjsInvalidation/AwsCR/CustomResourcePolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "CdkStack/NextJs/NextjsInvalidation/AwsCR/CustomResourcePolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "cloudfront:CreateInvalidation",
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            "arn:aws:cloudfront::",
+                                            {
+                                              "Ref": "AWS::AccountId"
+                                            },
+                                            ":distribution/",
+                                            {
+                                              "Ref": "NextJsNextjsDistributionCC78932F"
+                                            }
+                                          ]
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "NextJsNextjsInvalidationAwsCRCustomResourcePolicyD006D5BE",
+                                "roles": [
+                                  {
+                                    "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.177.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
+                          "version": "2.177.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.custom_resources.AwsCustomResource",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "cdk-nextjs.NextjsInvalidation",
+                  "version": "0.2.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "cdk-nextjs.NextjsGlobalFunctions",
+              "version": "0.2.0"
+            }
+          },
+          "Custom::S3AutoDeleteObjectsCustomResourceProvider": {
+            "id": "Custom::S3AutoDeleteObjectsCustomResourceProvider",
+            "path": "CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider",
+            "children": {
+              "Staging": {
+                "id": "Staging",
+                "path": "CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Staging",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.177.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.177.0"
+                }
+              },
+              "Handler": {
+                "id": "Handler",
+                "path": "CdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.177.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CustomResourceProviderBase",
+              "version": "2.177.0"
+            }
+          },
+          "Custom::VpcRestrictDefaultSGCustomResourceProvider": {
+            "id": "Custom::VpcRestrictDefaultSGCustomResourceProvider",
+            "path": "CdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider",
+            "children": {
+              "Staging": {
+                "id": "Staging",
+                "path": "CdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Staging",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.177.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "CdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.177.0"
+                }
+              },
+              "Handler": {
+                "id": "Handler",
+                "path": "CdkStack/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.177.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CustomResourceProviderBase",
+              "version": "2.177.0"
+            }
+          },
+          "AWS679f53fac002430cb0da5b7982bd2287": {
+            "id": "AWS679f53fac002430cb0da5b7982bd2287",
+            "path": "CdkStack/AWS679f53fac002430cb0da5b7982bd2287",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "CdkStack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "CdkStack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "CdkStack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.177.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "CdkStack/AWS679f53fac002430cb0da5b7982bd2287/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "CdkStack/AWS679f53fac002430cb0da5b7982bd2287/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.177.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "CdkStack/AWS679f53fac002430cb0da5b7982bd2287/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.177.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.177.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "CdkStack/AWS679f53fac002430cb0da5b7982bd2287/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1"
+                      },
+                      "s3Key": "ce2f3595a340d6c519a65888ef97e3b9b64f053f83608e32cc28162e22d7d99a.zip"
+                    },
+                    "handler": "index.handler",
+                    "role": {
+                      "Fn::GetAtt": [
+                        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "nodejs20.x",
+                    "timeout": 120
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.177.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.177.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "CdkStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "CdkStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.177.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "CdkStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.177.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "CdkStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.177.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.177.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.4.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.177.0"
+    }
+  }
+}
