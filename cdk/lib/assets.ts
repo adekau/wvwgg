@@ -25,27 +25,34 @@ export class NextJsAssets extends Construct {
       autoDeleteObjects: true, //  TODO: Change to false for production?
     });
 
-    // Extract Assets from Docker Image
-    const assetsDir = this.extractAssetsFromImage(props.buildImageDigest);
+    // Extract static and public assets from Docker Image
+    const staticAssetsDir = this.extractAssetsFromImage(props.buildImageDigest, { assetFolderToCopy: '.next/static', dockerImageWorkDir: '/app', bucketPath: '_next/static' });
+    const publicAssetsDir = this.extractAssetsFromImage(props.buildImageDigest, { assetFolderToCopy: 'public', dockerImageWorkDir: '/app', bucketPath: 'public' });
 
     // Upload Assets to S3
     this.bucketDeployment = new s3deploy.BucketDeployment(this, 'DeployAssets', {
-      sources: [s3deploy.Source.asset(assetsDir)],
-      destinationBucket: this.bucket,
-      destinationKeyPrefix: '_next/static',
+      sources: [s3deploy.Source.asset(staticAssetsDir), s3deploy.Source.asset(publicAssetsDir)],
+      destinationBucket: this.bucket
     });
   }
 
-    private extractAssetsFromImage(imageDigest: string): string {
-        const tempDir = fs.mkdtempSync(path.join('/tmp', 'nextjs-static-assets-'));
+    private extractAssetsFromImage(imageDigest: string, args: { assetFolderToCopy: string, dockerImageWorkDir: string, bucketPath: string }): string {
+        const tempDir = fs.mkdtempSync(path.join('/tmp', 'nextjs-assets-'));
         const containerId = execSync(`docker create ${imageDigest}`).toString().trim();
 
-        // TODO: This should probably be a parameter.
-        const staticAssetsPath = '/app/.next/static';
+        const assetsPath = path.join(args.dockerImageWorkDir, args.assetFolderToCopy);
+        const tempAssetsPathToMake = path.join(tempDir, args.bucketPath);
+        try {
+            fs.mkdirSync(tempAssetsPathToMake, { recursive: true });
+        } catch (error) {
+            console.error('Failed to create temp assets path', error);
+            throw error;
+        }
 
+        const tempAssetsPath = tempAssetsPathToMake.split('/').slice(0, -1).join('/');
         try {
             // Copy the assets out of the container.
-            execSync(`docker cp ${containerId}:${staticAssetsPath} ${tempDir}`);
+            execSync(`docker cp ${containerId}:${assetsPath} ${tempAssetsPath}`);
         } catch (error) {
             console.error('Failed to copy assets from container', error);
             throw error;
@@ -58,7 +65,6 @@ export class NextJsAssets extends Construct {
             console.error('Failed to remove container', error);
             throw error;
         }
-
-        return path.join(tempDir, 'static');
+        return tempDir;
     }
 } 

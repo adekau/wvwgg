@@ -57,6 +57,10 @@ export class NextJsDistribution extends Construct {
                     origin: origins.S3BucketOrigin.withOriginAccessControl(props.nextJsAssetsBucket),
                     viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
                 },
+                'public/*': {
+                    origin: origins.S3BucketOrigin.withOriginAccessControl(props.nextJsAssetsBucket),
+                    viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
+                }
             },
         });
     }
