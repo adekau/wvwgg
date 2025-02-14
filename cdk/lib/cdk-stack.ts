@@ -16,6 +16,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     const nextJsLambda = new lambda.DockerImageFunction(this, 'WvWGGNextJsLambda', {
+      architecture: lambda.Architecture.ARM_64,
       code: build.nextJsImage,
       memorySize: 1024,
       timeout: cdk.Duration.seconds(30),
@@ -36,7 +37,6 @@ export class CdkStack extends cdk.Stack {
       nextJsLambda,
       nextJsAssetsBucket: nextJsAssets.bucket
     });
-
 
     new cdk.CfnOutput(this, 'WvWGGCloudFrontUrl', {
       value: nextJsDistribution.distribution.domainName
