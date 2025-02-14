@@ -21,8 +21,10 @@ export class CdkStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(30),
       environment: {
         AWS_LWA_ENABLE_COMPRESSION: "true",
-        // TODO: See what I need to make this RESPONSE_STREAM (see also distribution.ts function url)
-        // AWS_LWA_INVOKE_MODE: "response_stream",
+        AWS_LWA_INVOKE_MODE: "response_stream",
+        AWS_LWA_PORT: "3000",
+        AWS_LWA_READINESS_CHECK_PORT: "3000",
+        AWS_LWA_READINESS_CHECK_PATH: "/api/health"
       }
     });
 

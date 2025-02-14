@@ -37,8 +37,7 @@ export class NextJsDistribution extends Construct {
         super(scope, id);
         this.functionUrl = props.nextJsLambda.addFunctionUrl({
             authType: lambda.FunctionUrlAuthType.AWS_IAM,
-            // TODO: See what I need to make this RESPONSE_STREAM
-            invokeMode: lambda.InvokeMode.BUFFERED
+            invokeMode: lambda.InvokeMode.RESPONSE_STREAM
         });
 
         const origin = origins.FunctionUrlOrigin.withOriginAccessControl(this.functionUrl);
