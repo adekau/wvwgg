@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import Button from "./button";
 
 export default function Home() {
   return (
@@ -44,13 +45,7 @@ export default function Home() {
           >
             Read our docs
           </a>
-          <button onClick={() => {
-            fetch('/api/health')
-              .then(res => res.json())
-              .then(data => console.log(data));
-          }}>
-            Health
-          </button>
+          <Button />
         </div>
       </main>
       <footer className={styles.footer}>

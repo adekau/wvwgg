@@ -27,12 +27,13 @@ export class NextJsAssets extends Construct {
 
     // Extract static and public assets from Docker Image
     const staticAssetsDir = this.extractAssetsFromImage(props.buildImageDigest, { assetFolderToCopy: '.next/static', dockerImageWorkDir: '/app', bucketPath: '_next/static' });
+    this.patchMainBundle(staticAssetsDir);
     const publicAssetsDir = this.extractAssetsFromImage(props.buildImageDigest, { assetFolderToCopy: 'public', dockerImageWorkDir: '/app', bucketPath: 'public' });
 
     // Upload Assets to S3
     this.bucketDeployment = new s3deploy.BucketDeployment(this, 'DeployAssets', {
       sources: [s3deploy.Source.asset(staticAssetsDir), s3deploy.Source.asset(publicAssetsDir)],
-      destinationBucket: this.bucket
+      destinationBucket: this.bucket,
     });
   }
 
@@ -67,4 +68,22 @@ export class NextJsAssets extends Construct {
         }
         return tempDir;
     }
+
+    private patchMainBundle(staticAssetsDir: string) {
+      const chunkDir = path.join(staticAssetsDir, '_next', 'static', 'chunks');
+      const chunkFiles = fs.readdirSync(chunkDir);
+      for (const chunkFile of chunkFiles) {
+        if (!chunkFile.startsWith('main-app-')) {
+          continue;
+        }
+
+        this.patchFile(path.join(chunkDir, chunkFile), path.join(__dirname, 'util', 'patch-fetch.js'));
+      }
+    }
+
+    private patchFile(mainFile: string, patchFile: string) {
+      const mainContent = fs.readFileSync(mainFile, 'utf8');
+      const patchContent = fs.readFileSync(patchFile, 'utf8');
+      fs.writeFileSync(mainFile, patchContent + '\n' + mainContent);
+    } 
 } 

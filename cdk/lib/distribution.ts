@@ -1,9 +1,9 @@
 import * as cdk from 'aws-cdk-lib';
-import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from "constructs";
 import lambda = cdk.aws_lambda
+import cloudfront = cdk.aws_cloudfront;
+import origins = cdk.aws_cloudfront_origins;
 
 export interface NextJsDistributionProps {
     nextJsLambda: lambda.DockerImageFunction;
@@ -40,7 +40,18 @@ export class NextJsDistribution extends Construct {
             invokeMode: lambda.InvokeMode.RESPONSE_STREAM
         });
 
+        const xForwardedHostFix = new cloudfront.Function(this, 'WvWGGXForwardedHostFix', {
+            code: cloudfront.FunctionCode.fromInline(`
+                function handler(event) {
+                    var request = event.request;
+                    request.headers['x-forwarded-host'] = request.headers['host'];
+                    return request;
+                }
+            `)
+        });
+
         const origin = origins.FunctionUrlOrigin.withOriginAccessControl(this.functionUrl);
+        const assetsOrigin = origins.S3BucketOrigin.withOriginAccessControl(props.nextJsAssetsBucket);
 
         this.distribution = new cloudfront.Distribution(this, 'WvWGGNextJsCloudFront', {
             defaultBehavior: {
@@ -49,15 +60,21 @@ export class NextJsDistribution extends Construct {
                 cachePolicy: this.createCachePolicy(),
                 originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
                 responseHeadersPolicy: this.createResponseHeadersPolicy(),
-                viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
+                viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                functionAssociations: [
+                    {
+                        eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+                        function: xForwardedHostFix
+                    }
+                ]
             },
             additionalBehaviors: {
                 '_next/static/*': {
-                    origin: origins.S3BucketOrigin.withOriginAccessControl(props.nextJsAssetsBucket),
+                    origin: assetsOrigin,
                     viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
                 },
                 'public/*': {
-                    origin: origins.S3BucketOrigin.withOriginAccessControl(props.nextJsAssetsBucket),
+                    origin: assetsOrigin,
                     viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
                 }
             },

@@ -15,8 +15,12 @@ export class CdkStack extends cdk.Stack {
       contextPath: path.join(__dirname, '../../web')
     });
 
+    const dynamoDbTable = new cdk.aws_dynamodb.TableV2(this, 'WvWGGTable', {
+      partitionKey: { name: 'type', type: cdk.aws_dynamodb.AttributeType.STRING },
+      billing: cdk.aws_dynamodb.Billing.onDemand()
+    });
+
     const nextJsLambda = new lambda.DockerImageFunction(this, 'WvWGGNextJsLambda', {
-      architecture: lambda.Architecture.ARM_64,
       code: build.nextJsImage,
       memorySize: 1024,
       timeout: cdk.Duration.seconds(30),
@@ -25,9 +29,11 @@ export class CdkStack extends cdk.Stack {
         AWS_LWA_INVOKE_MODE: "response_stream",
         AWS_LWA_PORT: "3000",
         AWS_LWA_READINESS_CHECK_PORT: "3000",
-        AWS_LWA_READINESS_CHECK_PATH: "/api/health"
+        AWS_LWA_READINESS_CHECK_PATH: "/api/health",
+        TABLE_NAME: dynamoDbTable.tableName
       }
     });
+    dynamoDbTable.grantReadWriteData(nextJsLambda);
 
     const nextJsAssets = new NextJsAssets(this, 'WvWGGNextJsAssets', {
       buildImageDigest: build.buildImageDigest,
