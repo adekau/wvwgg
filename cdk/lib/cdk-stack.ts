@@ -1,10 +1,13 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import path from 'node:path';
+import { NextJsAssets } from './assets';
 import { NextJsBuild } from './build';
 import { NextJsDistribution } from './distribution';
-import { NextJsAssets } from './assets';
 import lambda = cdk.aws_lambda;
+import lambdaNodejs = cdk.aws_lambda_nodejs;
+import events = cdk.aws_events;
+import eventTargets = cdk.aws_events_targets;
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -33,7 +36,23 @@ export class CdkStack extends cdk.Stack {
         TABLE_NAME: dynamoDbTable.tableName
       }
     });
+    const fetchMatchesLambda = new lambdaNodejs.NodejsFunction(this, 'WvWGGFetchMatchesLambda', {
+      entry: path.join(__dirname, '../lambda/match-cache.ts'),
+      runtime: lambda.Runtime.NODEJS_22_X,
+      handler: 'handler',
+      timeout: cdk.Duration.seconds(15),
+      environment: {
+        TABLE_NAME: dynamoDbTable.tableName,
+        ANET_MATCHES_ENDPOINT: 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
+      }
+    });
     dynamoDbTable.grantReadWriteData(nextJsLambda);
+    dynamoDbTable.grantReadWriteData(fetchMatchesLambda);
+
+    new events.Rule(this, 'WvWGGFetchMatchesRule', {
+      schedule: events.Schedule.rate(cdk.Duration.seconds(60)),
+      targets: [new eventTargets.LambdaFunction(fetchMatchesLambda)]
+    });
 
     const nextJsAssets = new NextJsAssets(this, 'WvWGGNextJsAssets', {
       buildImageDigest: build.buildImageDigest,
@@ -49,4 +68,3 @@ export class CdkStack extends cdk.Stack {
     });
   }
 }
-
