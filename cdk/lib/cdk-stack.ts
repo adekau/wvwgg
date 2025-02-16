@@ -33,7 +33,9 @@ export class CdkStack extends cdk.Stack {
         AWS_LWA_PORT: "3000",
         AWS_LWA_READINESS_CHECK_PORT: "3000",
         AWS_LWA_READINESS_CHECK_PATH: "/api/health",
-        TABLE_NAME: dynamoDbTable.tableName
+        TABLE_NAME: dynamoDbTable.tableName,
+        REGION: this.region,
+        NODE_ENV: 'production'
       }
     });
     const fetchMatchesLambda = new lambdaNodejs.NodejsFunction(this, 'WvWGGFetchMatchesLambda', {
@@ -43,7 +45,8 @@ export class CdkStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(15),
       environment: {
         TABLE_NAME: dynamoDbTable.tableName,
-        ANET_MATCHES_ENDPOINT: 'https://api.guildwars2.com/v2/wvw/matches?ids=all'
+        ANET_MATCHES_ENDPOINT: 'https://api.guildwars2.com/v2/wvw/matches?ids=all',
+        REGION: this.region
       }
     });
     dynamoDbTable.grantReadWriteData(nextJsLambda);
