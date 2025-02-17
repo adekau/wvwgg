@@ -63,7 +63,8 @@ export class CdkStack extends cdk.Stack {
 
     const nextJsDistribution = new NextJsDistribution(this, 'WvWGGNextJsDistribution', {
       nextJsLambda,
-      nextJsAssetsBucket: nextJsAssets.bucket
+      nextJsAssetsBucket: nextJsAssets.bucket,
+      domainNames: ['wvw.gg']
     });
 
     new cdk.CfnOutput(this, 'WvWGGCloudFrontUrl', {
