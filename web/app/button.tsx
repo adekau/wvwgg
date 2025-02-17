@@ -14,6 +14,6 @@ export default function Button() {
   }, []);
 
   return <div>
-    Data: {JSON.stringify(health?.Item, null, 2)}
+    Definitely beta: {JSON.stringify(health?.Item, null, 2)}
   </div>
 }

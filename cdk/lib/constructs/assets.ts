@@ -8,6 +8,7 @@ import s3deploy = cdk.aws_s3_deployment;
 
 export interface NextJsAssetsProps {
   buildImageDigest: string;
+  stage: 'dev' | 'prod';
 }
 
 export class NextJsAssets extends Construct {
@@ -18,11 +19,12 @@ export class NextJsAssets extends Construct {
     super(scope, id);
 
     // Create the S3 Bucket (or use an existing one)
-    this.bucket = new s3.Bucket(this, 'WvWGGNextJsAssetsBucket', {
+    this.bucket = new s3.Bucket(this, `WvWGGNextJsAssetsBucket-${props.stage}`, {
       publicReadAccess: false, 
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       removalPolicy: cdk.RemovalPolicy.DESTROY, //  TODO: Change to RETAIN for production?
       autoDeleteObjects: true, //  TODO: Change to false for production?
+      bucketName: props.stage === 'prod' ? `wvwgg-nextjs-assets-prod` : undefined
     });
 
     // Extract static and public assets from Docker Image
@@ -31,7 +33,7 @@ export class NextJsAssets extends Construct {
     const publicAssetsDir = this.extractAssetsFromImage(props.buildImageDigest, { assetFolderToCopy: 'public', dockerImageWorkDir: '/app', bucketPath: 'public' });
 
     // Upload Assets to S3
-    this.bucketDeployment = new s3deploy.BucketDeployment(this, 'DeployAssets', {
+    this.bucketDeployment = new s3deploy.BucketDeployment(this, `DeployAssets-${props.stage}`, {
       sources: [s3deploy.Source.asset(staticAssetsDir), s3deploy.Source.asset(publicAssetsDir)],
       destinationBucket: this.bucket,
     });
@@ -77,7 +79,7 @@ export class NextJsAssets extends Construct {
           continue;
         }
 
-        this.patchFile(path.join(chunkDir, chunkFile), path.join(__dirname, 'util', 'patch-fetch.js'));
+        this.patchFile(path.join(chunkDir, chunkFile), path.join(__dirname, '..', 'util', 'patch-fetch.js'));
       }
     }
 

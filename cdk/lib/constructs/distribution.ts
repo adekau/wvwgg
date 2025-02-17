@@ -12,6 +12,9 @@ export interface NextJsDistributionProps {
     nextJsLambda: lambda.DockerImageFunction;
     nextJsAssetsBucket: s3.Bucket;
     domainNames: string[];
+    zone: route53.HostedZone;
+    certificate: acm.Certificate;
+    stage: 'dev' | 'prod';
 }
 
 export class NextJsDistribution extends Construct {
@@ -60,27 +63,13 @@ export class NextJsDistribution extends Construct {
         const origin = origins.FunctionUrlOrigin.withOriginAccessControl(this.functionUrl);
         const assetsOrigin = origins.S3BucketOrigin.withOriginAccessControl(props.nextJsAssetsBucket);
 
-        // DNS Zone for the domain name. 
-        // Name servers generated need to be added to the domain registrar.
-        const zone = new route53.HostedZone(this, 'WvWGGCloudFrontHostedZone', {
-            zoneName: props.domainNames[0],
-            comment: 'WvWGG CloudFront Hosted Zone'
-        });
-
-        // ACM Certificate for the domain name.
-        // Uses DNS validation, the domain name provided needs to match the domain name in the zone in order to validate.
-        const certificate = new acm.Certificate(this, 'WvWGGCloudFrontCertificate', {
-            domainName: props.domainNames[0],
-            validation: acm.CertificateValidation.fromDns(zone),
-        });
-
-        this.distribution = new cloudfront.Distribution(this, 'WvWGGNextJsCloudFront', {
+        this.distribution = new cloudfront.Distribution(this, `WvWGGNextJsCloudFront-${props.stage}`, {
             defaultBehavior: {
                 origin,
                 allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-                cachePolicy: this.createCachePolicy(),
+                cachePolicy: this.createCachePolicy(props.stage),
                 originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-                responseHeadersPolicy: this.createResponseHeadersPolicy(),
+                responseHeadersPolicy: this.createResponseHeadersPolicy(props.stage),
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 functionAssociations: [
                     {
@@ -100,20 +89,19 @@ export class NextJsDistribution extends Construct {
                 }
             },
             domainNames: props.domainNames,
-            certificate: certificate
+            certificate: props.certificate
         });
 
         // points to the IP address of the CloudFront distribution
-        new route53.ARecord(this, 'WvWGGCloudFrontRecord', {
-            zone,
+        new route53.ARecord(this, `WvWGGCloudFrontARecord-${props.stage}`, {
+            zone: props.zone,
             target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(this.distribution)),
-            recordName: props.domainNames[0],
-            ttl: cdk.Duration.minutes(1)
+            recordName: props.domainNames[0]
         });
     }
 
-    private createCachePolicy(): cdk.aws_cloudfront.CachePolicy {
-        return new cdk.aws_cloudfront.CachePolicy(this, "WvWGGNextJsLambdaCachePolicy", {
+    private createCachePolicy(stage: 'dev' | 'prod'): cdk.aws_cloudfront.CachePolicy {
+        return new cdk.aws_cloudfront.CachePolicy(this, `WvWGGNextJsLambdaCachePolicy-${stage}`, {
             queryStringBehavior: cdk.aws_cloudfront.CacheQueryStringBehavior.all(),
             headerBehavior: cdk.aws_cloudfront.CacheHeaderBehavior.allowList(
                 "accept",
@@ -130,8 +118,8 @@ export class NextJsDistribution extends Construct {
         });
     }
 
-    private createResponseHeadersPolicy(): cloudfront.ResponseHeadersPolicy {
-        return new cloudfront.ResponseHeadersPolicy(this, "WvWGGNextJsLambdaResponseHeadersPolicy", {
+    private createResponseHeadersPolicy(stage: 'dev' | 'prod'): cloudfront.ResponseHeadersPolicy {
+        return new cloudfront.ResponseHeadersPolicy(this, `WvWGGNextJsLambdaResponseHeadersPolicy-${stage}`, {
             securityHeadersBehavior: this.commonSecurityHeadersBehavior,
             comment: `Nextjs Lambda Response Headers Policy for ${cdk.Stack.of(this).stackName}`
         });

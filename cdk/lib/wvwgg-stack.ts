@@ -1,16 +1,25 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import path from 'node:path';
-import { NextJsAssets } from './assets';
-import { NextJsBuild } from './build';
-import { NextJsDistribution } from './distribution';
+import { NextJsAssets } from './constructs/assets';
+import { NextJsBuild } from './constructs/build';
+import { NextJsDistribution } from './constructs/distribution';
 import lambda = cdk.aws_lambda;
 import lambdaNodejs = cdk.aws_lambda_nodejs;
 import events = cdk.aws_events;
 import eventTargets = cdk.aws_events_targets;
+import route53 = cdk.aws_route53;
+import acm = cdk.aws_certificatemanager;
 
-export class CdkStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+interface WvWGGStackProps extends cdk.StackProps {
+  zone: route53.HostedZone;
+  certificate: acm.Certificate;
+  stage: 'dev' | 'prod';
+  domainNames: string[];
+}
+
+export class WvWGGStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props: WvWGGStackProps) {
     super(scope, id, props);
 
     const build = new NextJsBuild(this, 'WvWGGNextJsBuild', {
@@ -18,12 +27,12 @@ export class CdkStack extends cdk.Stack {
       contextPath: path.join(__dirname, '../../web')
     });
 
-    const dynamoDbTable = new cdk.aws_dynamodb.TableV2(this, 'WvWGGTable', {
+    const dynamoDbTable = new cdk.aws_dynamodb.TableV2(this, `WvWGGTable-${props.stage}`, {
       partitionKey: { name: 'type', type: cdk.aws_dynamodb.AttributeType.STRING },
       billing: cdk.aws_dynamodb.Billing.onDemand()
     });
 
-    const nextJsLambda = new lambda.DockerImageFunction(this, 'WvWGGNextJsLambda', {
+    const nextJsLambda = new lambda.DockerImageFunction(this, `WvWGGNextJsLambda-${props.stage}`, {
       code: build.nextJsImage,
       memorySize: 1024,
       timeout: cdk.Duration.seconds(30),
@@ -38,7 +47,7 @@ export class CdkStack extends cdk.Stack {
         NODE_ENV: 'production'
       }
     });
-    const fetchMatchesLambda = new lambdaNodejs.NodejsFunction(this, 'WvWGGFetchMatchesLambda', {
+    const fetchMatchesLambda = new lambdaNodejs.NodejsFunction(this, `WvWGGFetchMatchesLambda-${props.stage}`, {
       entry: path.join(__dirname, '../lambda/match-cache.ts'),
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'handler',
@@ -57,17 +66,21 @@ export class CdkStack extends cdk.Stack {
       targets: [new eventTargets.LambdaFunction(fetchMatchesLambda)]
     });
 
-    const nextJsAssets = new NextJsAssets(this, 'WvWGGNextJsAssets', {
+    const nextJsAssets = new NextJsAssets(this, `WvWGGNextJsAssets-${props.stage}`, {
       buildImageDigest: build.buildImageDigest,
+      stage: props.stage
     });
 
-    const nextJsDistribution = new NextJsDistribution(this, 'WvWGGNextJsDistribution', {
+    const nextJsDistribution = new NextJsDistribution(this, `WvWGGNextJsDistribution-${props.stage}`, {
       nextJsLambda,
       nextJsAssetsBucket: nextJsAssets.bucket,
-      domainNames: ['wvw.gg']
+      domainNames: props.domainNames,
+      zone: props.zone,
+      certificate: props.certificate,
+      stage: props.stage
     });
 
-    new cdk.CfnOutput(this, 'WvWGGCloudFrontUrl', {
+    new cdk.CfnOutput(this, `WvWGGCloudFrontUrl-${props.stage}`, {
       value: nextJsDistribution.distribution.domainName
     });
   }

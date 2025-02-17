@@ -8,7 +8,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "deploy": "cdk deploy WvWGG-Dns WvWGG-Prod",
+    "deploy:dev": "cdk deploy WvWGG-Dns WvWGG-Dev"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.147",

@@ -1,23 +1,33 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import { CdkStack } from '../lib/cdk-stack';
+import { DnsStack } from '../lib/dns-stack';
+import { WvWGGStack } from '../lib/wvwgg-stack';
 
 const app = new cdk.App();
-new CdkStack(app, 'CdkStack', {
+
+const dnsStack = new DnsStack(app, 'WvWGG-Dns', {
+  baseDomainName: 'wvw.gg',
   env: {
     region: 'us-east-1'
   }
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
+});
 
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
+const devDeployment = new WvWGGStack(app, 'WvWGG-Dev', {
+  zone: dnsStack.zone,
+  certificate: dnsStack.certificate,
+  stage: 'dev',
+  domainNames: ['beta.wvw.gg'],
+  env: {
+    region: 'us-east-1'
+  }
+});
 
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
-
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+const prodDeployment = new WvWGGStack(app, 'WvWGG-Prod', {
+  zone: dnsStack.zone,
+  certificate: dnsStack.certificate,
+  stage: 'prod',
+  domainNames: ['wvw.gg', 'www.wvw.gg'],
+  env: {
+    region: 'us-east-1'
+  }
 });
