@@ -48,7 +48,7 @@ export class WvWGGStack extends cdk.Stack {
       }
     });
     const fetchMatchesLambda = new lambdaNodejs.NodejsFunction(this, `WvWGGFetchMatchesLambda-${props.stage}`, {
-      entry: path.join(__dirname, '../lambda/match-cache.ts'),
+      entry: path.join(__dirname, '../lambda/get-matches.ts'),
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'handler',
       timeout: cdk.Duration.seconds(15),
@@ -58,12 +58,28 @@ export class WvWGGStack extends cdk.Stack {
         REGION: this.region
       }
     });
+    const fetchWorldsLambda = new lambdaNodejs.NodejsFunction(this, `WvWGGFetchWorldsLambda-${props.stage}`, {
+      entry: path.join(__dirname, '../lambda/get-worlds.ts'),
+      runtime: lambda.Runtime.NODEJS_22_X,
+      handler: 'handler',
+      timeout: cdk.Duration.seconds(15),
+      environment: {
+        TABLE_NAME: dynamoDbTable.tableName,
+        ANET_WORLDS_ENDPOINT: 'https://api.guildwars2.com/v2/worlds?ids=all',
+        REGION: this.region
+      }
+    });
     dynamoDbTable.grantReadWriteData(nextJsLambda);
     dynamoDbTable.grantReadWriteData(fetchMatchesLambda);
+    dynamoDbTable.grantReadWriteData(fetchWorldsLambda);
 
     new events.Rule(this, 'WvWGGFetchMatchesRule', {
       schedule: events.Schedule.rate(cdk.Duration.seconds(60)),
       targets: [new eventTargets.LambdaFunction(fetchMatchesLambda)]
+    });
+    new events.Rule(this, 'WvWGGFetchWorldsRule', {
+      schedule: events.Schedule.rate(cdk.Duration.days(1)),
+      targets: [new eventTargets.LambdaFunction(fetchWorldsLambda)]
     });
 
     const nextJsAssets = new NextJsAssets(this, `WvWGGNextJsAssets-${props.stage}`, {
