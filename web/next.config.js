@@ -12,6 +12,12 @@ const config = {
     },
     typescript: {
         ignoreBuildErrors: true,
+    },
+    experimental: {
+        staleTimes: {
+            dynamic: 60,
+            static: 300,
+        }
     }
 };
 

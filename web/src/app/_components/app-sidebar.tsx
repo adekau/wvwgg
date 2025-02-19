@@ -1,23 +1,19 @@
-'use client';
 import { CommandIcon, Globe, Swords, Trophy, Users } from "lucide-react";
-import * as React from "react";
+import Link from "next/link";
 import { Label } from "~/components/ui/label";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
   SidebarInput,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
+  SidebarMenuItem
 } from "~/components/ui/sidebar";
 import { Switch } from "~/components/ui/switch";
-import { api } from "~/trpc/react";
-import { NavUser } from "./nav-user";
+import { api } from "~/trpc/server";
 
 const data = {
   user: {
@@ -54,11 +50,11 @@ const data = {
   matches: {} as any,
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [activeItem, setActiveItem] = React.useState(data.navMain[0])
-  const { data: matches } = api.match.getNAMatches.useQuery();
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  // const [activeItem, setActiveItem] = React.useState(data.navMain[0])
+  const matches = await api.match.getNAMatches();
 
-  const { setOpen } = useSidebar()
+  // const { setOpen } = useSidebar()
 
   return (
     <Sidebar collapsible="icon" className="overflow-hidden [&>[data-sidebar=sidebar]]:flex-row" {...props}>
@@ -94,11 +90,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         children: item.title,
                         hidden: false,
                       }}
-                      onClick={() => {
-                        setActiveItem(item)
-                        setOpen(true)
-                      }}
-                      isActive={activeItem?.title === item.title}
+                      // isActive={activeItem?.title === item.title}
                       className="px-2.5 md:px-2"
                     >
                       <item.icon />
@@ -110,9 +102,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter>
-          <NavUser user={data.user} />
-        </SidebarFooter>
       </Sidebar>
 
       {/* This is the second sidebar */}
@@ -120,7 +109,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <Sidebar collapsible="none" className="hidden flex-1 md:flex">
         <SidebarHeader className="gap-3.5 border-b p-4">
           <div className="flex w-full items-center justify-between">
-            <div className="text-base font-medium text-foreground">{activeItem?.title}</div>
+            <div className="text-base font-medium text-foreground">Matches</div>
             <Label className="flex items-center gap-2 text-sm">
               <span>Live Updates</span>
               <Switch className="shadow-none" />
@@ -144,10 +133,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
 function MatchSummary({ match }: { match: any }) {
   return (
-    <a
-      href="#"
-      className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-    >
+    <Link href={`/matches/${match.id}`} className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
       <div className="flex w-full items-center justify-between">
         <span className="font-medium">Match #{match.id}</span>
         <span className="text-xs">Live</span>
@@ -164,7 +150,7 @@ function MatchSummary({ match }: { match: any }) {
           <span className="text-green-500 dark:text-green-400">{match.green.skirmishScore} ({match.green.victoryPoints})</span>
         </div>
       </div>
-    </a>
+    </Link>
   )
 }
 

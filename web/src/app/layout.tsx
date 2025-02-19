@@ -1,8 +1,20 @@
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import { ThemeProvider } from "~/components/theme-provider";
+import { ThemeToggle } from "~/app/_components/theme-toggle";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "~/components/ui/breadcrumb";
+import { Separator } from "~/components/ui/separator";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
 import "~/styles/globals.css";
 import { TRPCReactProvider } from "~/trpc/react";
+import { AppSidebar } from "./_components/app-sidebar";
+import { ThemeProvider } from "./_components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -18,7 +30,34 @@ export default function RootLayout({
       <body>
         <TRPCReactProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
+            <SidebarProvider
+              style={
+                {
+                  "--sidebar-width": "350px",
+                } as React.CSSProperties
+              }
+            >
+              <AppSidebar />
+              <SidebarInset>
+              <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
+                <SidebarTrigger className="-ml-1" />
+                <Separator orientation="vertical" className="mr-2 h-4" />
+                <Breadcrumb className="flex-1">
+                  <BreadcrumbList>
+                    <BreadcrumbItem className="hidden md:block">
+                      <BreadcrumbLink href="/matches">Matches</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className="hidden md:block" />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>Tier 1</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+                <ThemeToggle />
+              </header>
+              {children}
+              </SidebarInset>
+            </SidebarProvider>
           </ThemeProvider>
         </TRPCReactProvider>
       </body>
