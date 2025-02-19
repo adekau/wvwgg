@@ -52,26 +52,30 @@ function getMatchesData(matches: Record<string, any>[], worlds: IWorld[], region
 
     return {
       ...acc, [match.id]: {
+        id: match.id,
         red: {
           world: getAllianceWorld(match.worlds?.red, worlds),
           kills: match.kills?.red,
           deaths: match.deaths?.red,
           ratio: Math.trunc(((match.kills?.red ?? 0) / (match.deaths?.red ?? 1)) * 100) / 100,
-          victoryPoints: match.victory_points?.red
+          victoryPoints: match.victory_points?.red,
+          skirmishScore: match.skirmishes ? match.skirmishes[match.skirmishes.length - 1].scores.red : 0
         },
         blue: {
           world: getAllianceWorld(match.worlds?.blue, worlds),
           kills: match.kills?.blue,
           deaths: match.deaths?.blue,
           ratio: Math.trunc(((match.kills?.blue ?? 0) / (match.deaths?.blue ?? 1)) * 100) / 100,
-          victoryPoints: match.victory_points?.blue
+          victoryPoints: match.victory_points?.blue,
+          skirmishScore: match.skirmishes ? match.skirmishes[match.skirmishes.length - 1].scores.blue : 0
         },
         green: {
           world: getAllianceWorld(match.worlds?.green, worlds),
           kills: match.kills?.green,
           deaths: match.deaths?.green,
           ratio: Math.trunc(((match.kills?.green ?? 0) / (match.deaths?.green ?? 1)) * 100) / 100,
-          victoryPoints: match.victory_points?.green
+          victoryPoints: match.victory_points?.green,
+          skirmishScore: match.skirmishes ? match.skirmishes[match.skirmishes.length - 1].scores.green : 0
         }
       }
     }
