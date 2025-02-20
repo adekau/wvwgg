@@ -67,7 +67,7 @@ export class NextJsDistribution extends Construct {
             defaultBehavior: {
                 origin,
                 allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-                cachePolicy: this.createCachePolicy(props.stage),
+                cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
                 originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
                 responseHeadersPolicy: this.createResponseHeadersPolicy(props.stage),
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,

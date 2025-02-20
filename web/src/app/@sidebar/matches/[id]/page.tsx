@@ -1,16 +1,19 @@
 import { api } from "~/trpc/server";
-import MatchSummaryLink from "../../../_components/match-summary-link";
-import RouteSidebarContent from "../../../_components/route-sidebar-content";
+import MatchSidebar from "../../../_components/match-sidebar";
+import { getMatches } from "~/server/api/routers/match";
+
+export const dynamic = 'force-dynamic';
+
+export async function generateStaticParams() {
+    const matches = await getMatches();
+
+    return Object.keys(matches).map((matchId) => ({
+        id: matchId
+    }));
+}
 
 export default async function MatchIdSidebar({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const matches = await api.match.getNAMatches();
-
-    return (
-        <RouteSidebarContent>
-            {Object.values(matches ?? {}).map((match: any) => (
-                <MatchSummaryLink key={match.id} match={match} active={match.id === id} />
-            ))}
-        </RouteSidebarContent>
-    );
+    return <MatchSidebar matches={matches} activeMatchId={id} />
 }

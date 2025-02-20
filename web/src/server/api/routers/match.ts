@@ -41,7 +41,7 @@ export const matchRouter = createTRPCRouter({
   })
 });
 
-export const getMatches = unstable_cache(async () => {
+export const getMatches = async () => {
   console.log('Getting matches');
   return (await ddbDocClient.get({
     TableName: TABLE_NAME,
@@ -49,9 +49,9 @@ export const getMatches = unstable_cache(async () => {
       type: 'matches',
     },
   })).Item?.data;
-}, ['matches'], { revalidate: 60 });
+}
 
-export const getWorlds = unstable_cache(async () => {
+export const getWorlds = async () => {
   console.log('Getting worlds');
   return (await ddbDocClient.get({
     TableName: TABLE_NAME,
@@ -59,7 +59,7 @@ export const getWorlds = unstable_cache(async () => {
       type: 'worlds',
     },
   })).Item?.data;
-}, ['worlds'], { revalidate: 60 * 60 * 24 });
+}
 
 function getAllianceWorld(worldId: number, worlds: IWorld[]): IWorld | undefined {
   return worlds.find((x) => x.associated_world_id === worldId);

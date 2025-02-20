@@ -15,8 +15,7 @@ const config = {
     },
     experimental: {
         staleTimes: {
-            dynamic: 0,
-            static: 60,
+            dynamic: 60
         }
     }
 };
