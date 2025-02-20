@@ -114,7 +114,9 @@ export class NextJsDistribution extends Construct {
             cookieBehavior: cdk.aws_cloudfront.CacheCookieBehavior.all(),
             enableAcceptEncodingBrotli: true,
             enableAcceptEncodingGzip: true,
-            comment: `Nextjs Dynamic Cache Policy for ${cdk.Stack.of(this).stackName}`
+            comment: `Nextjs Dynamic Cache Policy for ${cdk.Stack.of(this).stackName}`,
+            defaultTtl: cdk.Duration.minutes(1),
+            maxTtl: cdk.Duration.minutes(1)
         });
     }
 

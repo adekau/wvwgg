@@ -14,5 +14,3 @@ export default async function MatchIdSidebar({ params }: { params: Promise<{ id:
         </RouteSidebarContent>
     );
 }
-
-
