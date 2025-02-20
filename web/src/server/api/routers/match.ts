@@ -4,6 +4,7 @@ import { cache } from "react";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { IWorld } from '../../../../../shared/interfaces/world.interface';
+import { unstable_cache } from "next/cache";
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const ddbClient = new DynamoDB({
@@ -40,7 +41,7 @@ export const matchRouter = createTRPCRouter({
   })
 });
 
-export const getMatches = cache(async () => {
+export const getMatches = unstable_cache(async () => {
   console.log('Getting matches');
   return (await ddbDocClient.get({
     TableName: TABLE_NAME,
@@ -48,9 +49,9 @@ export const getMatches = cache(async () => {
       type: 'matches',
     },
   })).Item?.data;
-});
+}, ['matches'], { revalidate: 60 });
 
-export const getWorlds = cache(async () => {
+export const getWorlds = unstable_cache(async () => {
   console.log('Getting worlds');
   return (await ddbDocClient.get({
     TableName: TABLE_NAME,
@@ -58,7 +59,7 @@ export const getWorlds = cache(async () => {
       type: 'worlds',
     },
   })).Item?.data;
-});
+}, ['worlds'], { revalidate: 60 * 60 * 24 });
 
 function getAllianceWorld(worldId: number, worlds: IWorld[]): IWorld | undefined {
   return worlds.find((x) => x.associated_world_id === worldId);
