@@ -12,12 +12,12 @@ const config = {
     },
     typescript: {
         ignoreBuildErrors: true,
-    },
-    experimental: {
-        staleTimes: {
-            dynamic: 60
-        }
     }
+    // experimental: {
+    //     staleTimes: {
+    //         dynamic: 60
+    //     }
+    // }
 };
 
 export default config;

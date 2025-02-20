@@ -1,15 +1,4 @@
 import { api } from "~/trpc/server";
-import { getMatches } from "~/server/api/routers/match";
-
-export const dynamic = 'force-dynamic';
-
-export async function generateStaticParams() {
-    const matches = await getMatches();
-    
-    return Object.keys(matches).map((matchId) => ({
-        id: matchId
-    }));
-}
 
 export default async function MatchPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

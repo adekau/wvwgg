@@ -1,10 +1,9 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { IWorld } from '../../../../../shared/interfaces/world.interface';
-import { unstable_cache } from "next/cache";
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const ddbClient = new DynamoDB({
@@ -41,25 +40,31 @@ export const matchRouter = createTRPCRouter({
   })
 });
 
-export const getMatches = async () => {
+export const getMatches = unstable_cache(() => {
   console.log('Getting matches');
-  return (await ddbDocClient.get({
+  return ddbDocClient.get({
     TableName: TABLE_NAME,
     Key: {
       type: 'matches',
     },
-  })).Item?.data;
-}
+  }).then((res) => {
+    console.log('From dynamo (matches)', res);
+    return res.Item?.data;
+  });
+}, ['matches'], { revalidate: 60 });
 
-export const getWorlds = async () => {
+export const getWorlds = unstable_cache(() => {
   console.log('Getting worlds');
-  return (await ddbDocClient.get({
+  return ddbDocClient.get({
     TableName: TABLE_NAME,
     Key: {
       type: 'worlds',
     },
-  })).Item?.data;
-}
+  }).then((res) => {
+    console.log('From dynamo (worlds)', res);
+    return res.Item?.data;
+  });
+}, ['worlds'], { revalidate: 60 * 60 * 10 });
 
 function getAllianceWorld(worldId: number, worlds: IWorld[]): IWorld | undefined {
   return worlds.find((x) => x.associated_world_id === worldId);

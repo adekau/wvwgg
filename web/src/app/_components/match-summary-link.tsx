@@ -3,7 +3,7 @@ import { cn } from "~/lib/utils";
 
 export default function MatchSummaryLink({ match, active = false }: { match: any, active?: boolean }) {
     return (
-        <Link href={`/matches/${match.id}`} className={cn("flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground", active && "bg-sidebar-accent text-sidebar-accent-foreground")}>
+        <Link prefetch={true} href={`/matches/${match.id}`} className={cn("flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground", active && "bg-sidebar-accent text-sidebar-accent-foreground")}>
             <div className="flex w-full items-center justify-between">
                 <span className="font-medium">Match #{match.id}</span>
                 <span className="text-xs">Live</span>
