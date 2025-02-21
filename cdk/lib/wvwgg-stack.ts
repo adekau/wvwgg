@@ -36,6 +36,7 @@ export class WvWGGStack extends cdk.Stack {
       code: build.nextJsImage,
       memorySize: 1024,
       timeout: cdk.Duration.seconds(30),
+      ephemeralStorageSize: cdk.Size.mebibytes(512),
       environment: {
         AWS_LWA_ENABLE_COMPRESSION: "true",
         AWS_LWA_INVOKE_MODE: "response_stream",

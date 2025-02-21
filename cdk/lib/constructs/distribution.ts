@@ -67,7 +67,7 @@ export class NextJsDistribution extends Construct {
             defaultBehavior: {
                 origin,
                 allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
-                cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+                cachePolicy: this.createCachePolicy(),
                 originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
                 responseHeadersPolicy: this.createResponseHeadersPolicy(props.stage),
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -100,8 +100,8 @@ export class NextJsDistribution extends Construct {
         });
     }
 
-    private createCachePolicy(stage: 'dev' | 'prod'): cdk.aws_cloudfront.CachePolicy {
-        return new cdk.aws_cloudfront.CachePolicy(this, `WvWGGNextJsLambdaCachePolicy-${stage}`, {
+    private createCachePolicy(): cdk.aws_cloudfront.CachePolicy {
+        return new cdk.aws_cloudfront.CachePolicy(this, `WvWGGNextJsLambdaCachePolicy`, {
             queryStringBehavior: cdk.aws_cloudfront.CacheQueryStringBehavior.all(),
             headerBehavior: cdk.aws_cloudfront.CacheHeaderBehavior.allowList(
                 "accept",

@@ -1,3 +1,4 @@
+'use client';
 import MatchSummaryLink from "../_components/match-summary-link";
 import RouteSidebarContent from "../_components/route-sidebar-content";
 
@@ -10,4 +11,3 @@ export default function MatchSidebar({ matches, activeMatchId }: { matches: any,
         </RouteSidebarContent>
     );
 }
-

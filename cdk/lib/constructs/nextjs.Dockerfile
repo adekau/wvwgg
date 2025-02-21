@@ -10,6 +10,11 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 
+ENV NEXT_CACHE_DIR=/tmp/next-cache
+RUN mkdir -p $NEXT_CACHE_DIR/fetch-cache
+RUN chown -R nextjs:nodejs $NEXT_CACHE_DIR
+RUN chmod -R 755 $NEXT_CACHE_DIR
+
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
