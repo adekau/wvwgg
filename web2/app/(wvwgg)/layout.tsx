@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { MainLayout } from "../components/main-layout";
 import { MainNav } from "../components/main-nav";
 
-export default async function WvWGGLayout({ children }: { children: React.ReactNode }) {
+export default async function WvWGGLayout({ children, content }: { children: React.ReactNode, content: React.ReactNode }) {
     const cookiesStore = await cookies();
     const collapsed = cookiesStore.get("react-resizable-panels:collapsed");
     const layout = cookiesStore.get("react-resizable-panels:layout:wvwgg")
@@ -17,8 +17,9 @@ export default async function WvWGGLayout({ children }: { children: React.ReactN
                 <MainNav defaultLayout={defaultLayout} navCollapsedSize={1} defaultCollapsed={defaultCollapsed} />
                 <ResizableHandle withHandle />
                 {children}
+                <ResizableHandle withHandle />
+                {content}
             </MainLayout>
         </TooltipProvider>
-
     )
 }

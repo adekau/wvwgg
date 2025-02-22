@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { ComponentProps } from "react"
 import { Mail } from "../data"
 import { useMail } from "../use-mail"
-
+import Link from "next/link"
 interface MailListProps {
   items: Mail[]
 }
@@ -16,8 +16,9 @@ export function MailList({ items }: MailListProps) {
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2 p-4 pt-0">
         {items.map((item) => (
-          <button
+          <Link
             key={item.id}
+            href={`/matches/${item.id}`}
             className={cn(
               "flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent",
               mail.selected === item.id && "bg-muted"
@@ -64,7 +65,7 @@ export function MailList({ items }: MailListProps) {
                 ))}
               </div>
             ) : null}
-          </button>
+          </Link>
         ))}
       </div>
     </ScrollArea>
