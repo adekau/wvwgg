@@ -6,7 +6,7 @@ export default async function MatchIdContent({ params }: { params: Promise<{ id:
     const { id } = await params;
     const cookiesStore = await cookies();
     const layout = cookiesStore.get("react-resizable-panels:layout:wvwgg")
-    const defaultLayout = layout ? JSON.parse(layout.value) : undefined
+    const defaultLayout = layout ? JSON.parse(layout.value) : [10, 24, 64];
 
     return (
         <ResizablePanel defaultSize={defaultLayout[2]} minSize={30}>

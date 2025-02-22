@@ -1,5 +1,5 @@
-import MailPage from "./page";
+import MatchesPage from "./page";
 
 export default function MatchesDefault() {
-    return <MailPage />
+    return <MatchesPage />
 }
