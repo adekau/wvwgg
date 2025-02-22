@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { mails } from "../../data";
 import MatchesPanel from "./components/matches-panel";
 
 export default async function MailPage() {
@@ -8,6 +7,6 @@ export default async function MailPage() {
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined
 
   return (
-    <MatchesPanel defaultLayout={defaultLayout} mails={mails} />
+    <MatchesPanel defaultLayout={defaultLayout} />
   )
 }

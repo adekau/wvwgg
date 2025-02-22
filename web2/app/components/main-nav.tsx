@@ -7,7 +7,6 @@ import { useState } from "react";
 import { Nav } from "./nav";
 
 export function MainNav({ defaultLayout, navCollapsedSize, defaultCollapsed }: { defaultLayout: [mainNavSize: number, detailSize: number, contentSize: number], navCollapsedSize: number, defaultCollapsed: boolean }) {
-    console.log('defaultCollapsed', defaultCollapsed)
     const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed)
 
     return (
