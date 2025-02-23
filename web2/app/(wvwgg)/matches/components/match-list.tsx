@@ -1,21 +1,23 @@
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
+import { useAtom } from "jotai"
 import Link from "next/link"
-import { useSelectedMatch } from "../providers/matches-atom"
+import { selectedMatchAtom } from "../../../providers/matches-atom"
 
 interface MatchListProps {
   matches: any
 }
 
 export function MatchList({ matches }: MatchListProps) {
-  const [selectedMatch, setSelectedMatch] = useSelectedMatch();
+  const [selectedMatch, setSelectedMatch] = useAtom(selectedMatchAtom);
 
   return (
-    <ScrollArea className="h-screen">
-      <div className="flex flex-col gap-2 p-4 pt-0">
+      <div className="h-screen flex flex-col gap-2 p-4 pt-0 overflow-y-auto">
         {matches.sort((a: any, b: any) => {
-          return a.id.startsWith("1") ? -1 : 1;
+          const naOrEu = a.id.startsWith("1") ? -100 : 100;
+          const tier = a.id.split('-')[1] - b.id.split('-')[1];
+          return naOrEu - tier;
         }).map((match: any) => {
           return (
             <Link
@@ -50,6 +52,5 @@ export function MatchList({ matches }: MatchListProps) {
           )
         })}
       </div>
-    </ScrollArea>
   )
 }

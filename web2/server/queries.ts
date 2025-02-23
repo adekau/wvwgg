@@ -23,7 +23,6 @@ export const getMatches = unstable_cache(() => {
             type: 'matches',
         },
     }).then((res) => {
-        console.log('From dynamo (matches)', res);
         return res.Item?.data;
     });
 }, ['matches'], { revalidate: 60 });
@@ -36,7 +35,6 @@ export const getWorlds = unstable_cache(() => {
             type: 'worlds',
         },
     }).then((res) => {
-        console.log('From dynamo (worlds)', res);
         return res.Item?.data;
     });
 }, ['worlds'], { revalidate: 60 * 60 * 10 });

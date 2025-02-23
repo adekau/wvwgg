@@ -1,9 +1,10 @@
 'use client';
+import { useSetAtom } from "jotai";
 import { useEffect } from "react";
-import { useMatches } from "./matches-atom";
+import { matchesAtom } from "./matches-atom";
 
 export default function MatchesProvider({ matches }: { matches: any }) {
-    const [_matches, setMatches] = useMatches();
+    const setMatches = useSetAtom(matchesAtom);
 
     useEffect(() => {
         setMatches(matches);

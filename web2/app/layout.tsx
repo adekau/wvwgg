@@ -1,3 +1,4 @@
+import { Provider as JotaiProvider } from "jotai";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { getMatches, getMatchesData, getWorlds } from "../server/queries";
@@ -28,19 +29,21 @@ export default async function RootLayout({
   const matches = getMatchesData(await getMatches(), await getWorlds());
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
       >
-        <MatchesProvider matches={matches} />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <JotaiProvider>
+          <MatchesProvider matches={matches} />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </JotaiProvider>
       </body>
     </html>
   );

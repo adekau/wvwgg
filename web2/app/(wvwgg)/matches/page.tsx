@@ -1,12 +1,10 @@
-import { cookies } from "next/headers";
+import { getUserPreferences } from "../../util/user-preferences";
 import MatchesPanel from "./components/matches-panel";
 
 export default async function MatchesPage() {
-  const cookiesStore = await cookies();
-  const layout = cookiesStore.get("react-resizable-panels:layout:wvwgg")
-  const defaultLayout = layout ? JSON.parse(layout.value) : [10, 24, 64];
+  const { layout, selectedMatchFilter } = await getUserPreferences();
 
   return (
-    <MatchesPanel defaultLayout={defaultLayout} />
+    <MatchesPanel layout={layout} selectedMatchFilter={selectedMatchFilter} />
   )
 }
