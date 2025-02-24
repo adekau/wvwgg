@@ -2,7 +2,7 @@
 import { ResizablePanel } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { File, Send, SwordsIcon, Trophy } from "lucide-react";
+import { ClockIcon, ShieldIcon, SwordsIcon, Trophy } from "lucide-react";
 import { useState } from "react";
 import { Nav } from "./nav";
 
@@ -52,13 +52,13 @@ export function MainNav({ defaultLayout, navCollapsedSize, defaultCollapsed }: {
                         variant: "default",
                     },
                     {
-                        title: "Drafts",
-                        icon: File,
+                        title: "Guilds",
+                        icon: ShieldIcon,
                         variant: "ghost",
                     },
                     {
-                        title: "Sent",
-                        icon: Send,
+                        title: "Timezones",
+                        icon: ClockIcon,
                         variant: "ghost",
                     }
                 ]}

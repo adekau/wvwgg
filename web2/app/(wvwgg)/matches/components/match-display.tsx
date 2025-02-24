@@ -3,11 +3,12 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { Separator } from "@/components/ui/separator";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect } from "react";
+import { MatchId } from "../../../../../shared/interfaces/match-id.type";
 import { ThemeToggle } from "../../../components/theme-toggle";
 import { matchesAtom, selectedMatchAtom } from "../../../providers/matches-atom";
 
 interface MatchDisplayProps {
-  matchId: string
+  matchId: MatchId;
 }
 
 export function MatchDisplay({ matchId }: MatchDisplayProps) {

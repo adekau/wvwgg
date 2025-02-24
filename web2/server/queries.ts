@@ -1,7 +1,9 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { unstable_cache } from "next/cache";
+import { IFormattedMatch } from '../../shared/interfaces/formatted-match.interface';
 import { IWorld } from '../../shared/interfaces/world.interface';
+import { MatchId } from "../../shared/interfaces/match-id.type";
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const ddbClient = new DynamoDB({
@@ -43,36 +45,46 @@ function getAllianceWorld(worldId: number, worlds: IWorld[]): IWorld | undefined
     return worlds.find((x) => x.associated_world_id === worldId);
 }
 
-export function getMatchesData(matches: Record<string, any>[], worlds: IWorld[]): Record<string, any> {
+export function getMatchesData(matches: Record<string, any>[], worlds: IWorld[]): Record<MatchId, IFormattedMatch> {
     return matches.reduce((acc: Record<string, any>, match: any) => {
+        const redWorld = getAllianceWorld(match.worlds?.red, worlds);
+        const blueWorld = getAllianceWorld(match.worlds?.blue, worlds);
+        const greenWorld = getAllianceWorld(match.worlds?.green, worlds);
+        if (!redWorld || !blueWorld || !greenWorld) {
+            throw new Error('A world could not be found');
+        }
+
         return {
             ...acc, [match.id]: {
                 id: match.id,
                 red: {
-                    world: getAllianceWorld(match.worlds?.red, worlds),
+                    world: redWorld,
                     kills: match.kills?.red,
                     deaths: match.deaths?.red,
+                    activity: match.kills?.red + match.deaths?.red,
                     ratio: Math.trunc(((match.kills?.red ?? 0) / (match.deaths?.red ?? 1)) * 100) / 100,
                     victoryPoints: match.victory_points?.red,
                     skirmishScore: match.skirmishes ? match.skirmishes[match.skirmishes.length - 1].scores.red : 0
                 },
                 blue: {
-                    world: getAllianceWorld(match.worlds?.blue, worlds),
+                    world: blueWorld,
                     kills: match.kills?.blue,
                     deaths: match.deaths?.blue,
+                    activity: match.kills?.blue + match.deaths?.blue,
                     ratio: Math.trunc(((match.kills?.blue ?? 0) / (match.deaths?.blue ?? 1)) * 100) / 100,
                     victoryPoints: match.victory_points?.blue,
                     skirmishScore: match.skirmishes ? match.skirmishes[match.skirmishes.length - 1].scores.blue : 0
                 },
                 green: {
-                    world: getAllianceWorld(match.worlds?.green, worlds),
+                    world: greenWorld,
                     kills: match.kills?.green,
                     deaths: match.deaths?.green,
+                    activity: match.kills?.green + match.deaths?.green,
                     ratio: Math.trunc(((match.kills?.green ?? 0) / (match.deaths?.green ?? 1)) * 100) / 100,
                     victoryPoints: match.victory_points?.green,
                     skirmishScore: match.skirmishes ? match.skirmishes[match.skirmishes.length - 1].scores.green : 0
                 }
-            }
+            } satisfies IFormattedMatch
         }
     }, {});
 }
