@@ -29,8 +29,8 @@ export function MainNav({ defaultLayout, navCollapsedSize, defaultCollapsed }: {
                 )}`
             }}
             className={cn(
-                isCollapsed &&
-                "min-w-[50px] transition-all duration-300 ease-in-out"
+                "bg-sidebar",
+                isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out"
             )}
         >
             <div className={cn("h-[52px]", isCollapsed ? "h-[52px]" : "pt-1")}>
@@ -38,7 +38,7 @@ export function MainNav({ defaultLayout, navCollapsedSize, defaultCollapsed }: {
                     {
                         title: "wvw.gg",
                         icon: CommandIcon,
-                        variant: "ghost"
+                        variant: "logo"
                     }
                 ]} />
             </div>
