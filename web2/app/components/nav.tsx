@@ -58,7 +58,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
               )}
             >
               <link.icon className="mr-2 h-4 w-4" />
-              {link.title}
+              {link.variant === 'logo' ? <span className="font-bold">{link.title}</span> : link.title}
             </Link>
           )
         )}

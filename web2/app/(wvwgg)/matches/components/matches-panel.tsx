@@ -5,6 +5,7 @@ import { ResizablePanel } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAtomValue } from "jotai";
+import { Swords } from "lucide-react";
 
 export default function MatchesPanel({ layout, selectedMatchFilter }: { layout: number[], selectedMatchFilter: string }) {
     const matches = useAtomValue(matchesAtom);
@@ -14,7 +15,7 @@ export default function MatchesPanel({ layout, selectedMatchFilter }: { layout: 
                 document.cookie = `selected-match-filter=${JSON.stringify(value)};path=/`;
             }}>
                 <div className="flex items-center px-4 py-2 h-[52px]">
-                    <h1 className="text-xl font-bold">Matches</h1>
+                    <h1 className="text-xl font-bold flex"><Swords className="mr-2 pt-1" /><span>Matches</span></h1>
                     <TabsList className="ml-auto">
                         <TabsTrigger
                             value="all"

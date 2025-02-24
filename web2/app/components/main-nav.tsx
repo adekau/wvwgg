@@ -2,7 +2,7 @@
 import { ResizablePanel } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { CommandIcon, File, Send, SwordsIcon } from "lucide-react";
+import { File, Send, SwordsIcon, Trophy } from "lucide-react";
 import { useState } from "react";
 import { Nav } from "./nav";
 
@@ -36,8 +36,8 @@ export function MainNav({ defaultLayout, navCollapsedSize, defaultCollapsed }: {
             <div className={cn("h-[52px]", isCollapsed ? "h-[52px]" : "pt-1")}>
                 <Nav isCollapsed={isCollapsed} links={[
                     {
-                        title: "wvw.gg",
-                        icon: CommandIcon,
+                        title: "WvW.gg",
+                        icon: Trophy,
                         variant: "logo"
                     }
                 ]} />
