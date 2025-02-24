@@ -9,7 +9,7 @@ import { useAtomValue } from "jotai";
 export default function MatchesPanel({ layout, selectedMatchFilter }: { layout: number[], selectedMatchFilter: string }) {
     const matches = useAtomValue(matchesAtom);
     return (
-        <ResizablePanel className="bg-sidebar" defaultSize={layout[1]} minSize={22} maxSize={32}>
+        <ResizablePanel className="bg-sidebar" defaultSize={layout[1]} collapsible={true} collapsedSize={0} minSize={22} maxSize={32}>
             <Tabs defaultValue={selectedMatchFilter} onValueChange={(value) => {
                 document.cookie = `selected-match-filter=${JSON.stringify(value)};path=/`;
             }}>

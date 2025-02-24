@@ -14,8 +14,8 @@ export function MainNav({ defaultLayout, navCollapsedSize, defaultCollapsed }: {
             defaultSize={defaultLayout[0]}
             collapsedSize={navCollapsedSize}
             collapsible={true}
-            minSize={8}
-            maxSize={12}
+            minSize={7}
+            maxSize={10}
             onCollapse={() => {
                 setIsCollapsed(true)
                 document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
@@ -48,19 +48,16 @@ export function MainNav({ defaultLayout, navCollapsedSize, defaultCollapsed }: {
                 links={[
                     {
                         title: "Matches",
-                        label: "128",
                         icon: SwordsIcon,
                         variant: "default",
                     },
                     {
                         title: "Drafts",
-                        label: "9",
                         icon: File,
                         variant: "ghost",
                     },
                     {
                         title: "Sent",
-                        label: "",
                         icon: Send,
                         variant: "ghost",
                     }

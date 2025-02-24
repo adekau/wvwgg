@@ -1,21 +1,18 @@
 "use client"
-
-import Link from "next/link"
-import { LucideIcon } from "lucide-react"
-
-import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
+import { LucideIcon } from "lucide-react"
+import Link from "next/link"
 
 interface NavProps {
   isCollapsed: boolean
   links: {
     title: string
-    label?: string
     icon: LucideIcon
     variant: "default" | "ghost" | "logo"
   }[]
@@ -47,11 +44,6 @@ export function Nav({ links, isCollapsed }: NavProps) {
               </TooltipTrigger>
               <TooltipContent side="right" className="flex items-center gap-4">
                 {link.title}
-                {link.label && (
-                  <span className="ml-auto text-muted-foreground">
-                    {link.label}
-                  </span>
-                )}
               </TooltipContent>
             </Tooltip>
           ) : (
@@ -67,17 +59,6 @@ export function Nav({ links, isCollapsed }: NavProps) {
             >
               <link.icon className="mr-2 h-4 w-4" />
               {link.title}
-              {link.label && (
-                <span
-                  className={cn(
-                    "ml-auto",
-                    link.variant === "default" &&
-                      "text-background dark:text-white"
-                  )}
-                >
-                  {link.label}
-                </span>
-              )}
             </Link>
           )
         )}
