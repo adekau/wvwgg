@@ -18,15 +18,11 @@ export function MainNav({ defaultLayout, navCollapsedSize, defaultCollapsed }: {
             maxSize={10}
             onCollapse={() => {
                 setIsCollapsed(true)
-                document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
-                    true
-                )}`
+                document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)};path=/`
             }}
             onResize={() => {
                 setIsCollapsed(false)
-                document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(
-                    false
-                )}`
+                document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)};path=/`
             }}
             className={cn(
                 "bg-sidebar",
