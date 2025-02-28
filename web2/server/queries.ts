@@ -4,8 +4,12 @@ import { unstable_cache } from "next/cache";
 import { IFormattedMatch } from '../../shared/interfaces/formatted-match.interface';
 import { IWorld } from '../../shared/interfaces/world.interface';
 import { MatchId } from "../../shared/interfaces/match-id.type";
+import j from './tmp-alliance-worlds.json' with { type: 'json' };
 
-const TABLE_NAME = process.env.TABLE_NAME;
+const STAGE = process.env.WVWGG_STAGE;
+const TABLE_NAME = STAGE == null ? process.env.TABLE_NAME_LOCAL_DEV : process.env.TABLE_NAME;
+console.log('TABLE_NAME', TABLE_NAME);
+
 const ddbClient = new DynamoDB({
     region: 'us-east-1',
     credentials: {
@@ -17,28 +21,43 @@ const ddbClient = new DynamoDB({
 
 const ddbDocClient = DynamoDBDocument.from(ddbClient);
 
-export const getMatches = unstable_cache(() => {
+export const getMatches = unstable_cache(async () => {
     console.log('Getting matches');
-    return ddbDocClient.get({
-        TableName: TABLE_NAME,
-        Key: {
-            type: 'matches',
-        },
-    }).then((res) => {
-        return res.Item?.data;
-    });
+    try {
+        return await ddbDocClient.get({
+            TableName: TABLE_NAME,
+            Key: {
+                type: 'matches',
+                id: 'all'
+            },
+        }).then((res) => {
+            return res.Item?.data;
+        });
+    } catch (error) {
+        console.error('Falling back to fetching from Anet', error);
+        return await fetch('https://api.guildwars2.com/v2/wvw/matches?ids=all')
+            .then((res) => res.json());
+    }
 }, ['matches'], { revalidate: 60 });
 
-export const getWorlds = unstable_cache(() => {
+export const getWorlds = unstable_cache(async () => {
     console.log('Getting worlds');
-    return ddbDocClient.get({
-        TableName: TABLE_NAME,
-        Key: {
-            type: 'worlds',
-        },
-    }).then((res) => {
-        return res.Item?.data;
-    });
+    try {
+        return await ddbDocClient.get({
+            TableName: TABLE_NAME,
+            Key: {
+                type: 'worlds',
+                id: 'all'
+            },
+        }).then((res) => {
+            return res.Item?.data;
+        });
+    } catch (error) {
+        console.error('Falling back to fetching from Anet', error);
+        return await fetch('https://api.guildwars2.com/v2/worlds?ids=all')
+            .then((res) => res.json())
+            .then((data) => [...data, ...j]);
+    }
 }, ['worlds'], { revalidate: 60 * 60 * 10 });
 
 function getAllianceWorld(worldId: number, worlds: IWorld[]): IWorld | undefined {

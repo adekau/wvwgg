@@ -29,6 +29,7 @@ export class WvWGGStack extends cdk.Stack {
 
     const dynamoDbTable = new cdk.aws_dynamodb.TableV2(this, `WvWGGTable-${props.stage}`, {
       partitionKey: { name: 'type', type: cdk.aws_dynamodb.AttributeType.STRING },
+      sortKey: { name: 'id', type: cdk.aws_dynamodb.AttributeType.STRING },
       billing: cdk.aws_dynamodb.Billing.onDemand()
     });
 
@@ -45,9 +46,14 @@ export class WvWGGStack extends cdk.Stack {
         AWS_LWA_READINESS_CHECK_PATH: "/api/health",
         TABLE_NAME: dynamoDbTable.tableName,
         REGION: this.region,
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        WVWGG_STAGE: props.stage
       }
     });
+    // depends on the table being created first
+    nextJsLambda.node.addDependency(dynamoDbTable);
+    nextJsLambda.node.addDependency(build);
+
     const fetchMatchesLambda = new lambdaNodejs.NodejsFunction(this, `WvWGGFetchMatchesLambda-${props.stage}`, {
       entry: path.join(__dirname, '../lambda/get-matches.ts'),
       runtime: lambda.Runtime.NODEJS_22_X,
@@ -59,6 +65,8 @@ export class WvWGGStack extends cdk.Stack {
         REGION: this.region
       }
     });
+    fetchMatchesLambda.node.addDependency(dynamoDbTable);
+
     const fetchWorldsLambda = new lambdaNodejs.NodejsFunction(this, `WvWGGFetchWorldsLambda-${props.stage}`, {
       entry: path.join(__dirname, '../lambda/get-worlds.ts'),
       runtime: lambda.Runtime.NODEJS_22_X,
@@ -70,23 +78,29 @@ export class WvWGGStack extends cdk.Stack {
         REGION: this.region
       }
     });
+    fetchWorldsLambda.node.addDependency(dynamoDbTable);
+
     dynamoDbTable.grantReadWriteData(nextJsLambda);
     dynamoDbTable.grantReadWriteData(fetchMatchesLambda);
     dynamoDbTable.grantReadWriteData(fetchWorldsLambda);
 
-    new events.Rule(this, 'WvWGGFetchMatchesRule', {
+    const fetchMatchesRule = new events.Rule(this, 'WvWGGFetchMatchesRule', {
       schedule: events.Schedule.rate(cdk.Duration.seconds(60)),
       targets: [new eventTargets.LambdaFunction(fetchMatchesLambda)]
     });
-    new events.Rule(this, 'WvWGGFetchWorldsRule', {
+    fetchMatchesRule.node.addDependency(fetchMatchesLambda);
+
+    const fetchWorldsRule = new events.Rule(this, 'WvWGGFetchWorldsRule', {
       schedule: events.Schedule.rate(cdk.Duration.days(1)),
       targets: [new eventTargets.LambdaFunction(fetchWorldsLambda)]
     });
+    fetchWorldsRule.node.addDependency(fetchWorldsLambda);
 
     const nextJsAssets = new NextJsAssets(this, `WvWGGNextJsAssets-${props.stage}`, {
       buildImageDigest: build.buildImageDigest,
       stage: props.stage
     });
+    nextJsAssets.node.addDependency(build);
 
     const nextJsDistribution = new NextJsDistribution(this, `WvWGGNextJsDistribution-${props.stage}`, {
       nextJsLambda,
@@ -96,6 +110,7 @@ export class WvWGGStack extends cdk.Stack {
       certificate: props.certificate,
       stage: props.stage
     });
+    nextJsDistribution.node.addDependency(nextJsLambda);
 
     new cdk.CfnOutput(this, `WvWGGCloudFrontUrl-${props.stage}`, {
       value: nextJsDistribution.distribution.domainName

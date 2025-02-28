@@ -36,7 +36,8 @@
     "react-dom": "^19.0.0",
     "react-resizable-panels": "^2.1.7",
     "tailwind-merge": "^3.0.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "babel-plugin-react-compiler":"^19.0.0-beta-e1e972c-20250221"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

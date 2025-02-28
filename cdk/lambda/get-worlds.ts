@@ -48,6 +48,7 @@ const saveCachedWorlds = async (worldsResponse: IWorld[]): Promise<void> => {
     TableName: TABLE_NAME,
     Item: {
       type: "worlds",
+      id: "all",
       data: worldsResponse,
       updatedAt: Date.now()
     }

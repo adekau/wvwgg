@@ -46,6 +46,7 @@ const saveCachedMatches = async (matchesResponse: MatchData): Promise<void> => {
     TableName: TABLE_NAME,
     Item: {
       type: "matches",
+      id: "all",
       data: matchesResponse,
       updatedAt: Date.now()
     }
