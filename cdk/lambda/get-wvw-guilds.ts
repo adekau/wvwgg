@@ -49,6 +49,9 @@ export const handler = async (event: IGetWvwGuildsEvent) => {
     // }
     return {
         statusCode: 200,
-        body: JSON.stringify({ count: Object.keys(guilds).length })
+        body: { 
+            count: Object.keys(guilds).length,
+            wvwRegion
+        }
     };
 }
