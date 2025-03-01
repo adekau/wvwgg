@@ -7,7 +7,7 @@ export default function MatchesProvider({ matches }: { matches: any }) {
     const setMatches = useSetAtom(matchesAtom);
 
     useEffect(() => {
-        setMatches(matches);
+        setMatches({ ...matches });
     }, [matches]);
 
     return null;

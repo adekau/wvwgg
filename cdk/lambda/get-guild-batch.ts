@@ -1,0 +1,59 @@
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
+import { BatchWriteCommandInput, DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
+import { IBaseGuild } from "../../shared/interfaces/base-guild.interface";
+import { IGuildResponse } from "../../shared/interfaces/guild-response.interface";
+import { IGuild } from "../../shared/interfaces/guild.interface";
+
+interface IGuildBatchEvent {
+    Items: IBaseGuild[];
+    tableNames: string[];
+}
+
+const REGION = process.env.REGION;
+const ANET_GUILD_ENDPOINT = process.env.ANET_GUILD_ENDPOINT;
+const dynamoDb = DynamoDBDocument.from(new DynamoDB({ region: REGION }));
+
+export async function handler(event: IGuildBatchEvent) {
+    const { Items, tableNames } = event;
+    const guilds = await Promise.all(
+        Items.map(({ id, worldId }) => fetch(`${ANET_GUILD_ENDPOINT}/${id}`)
+            .then<IGuildResponse>((x) => x.json())
+            .then((guildResponse) => {
+                return {
+                    id,
+                    worldId,
+                    name: guildResponse.name,
+                    tag: guildResponse.tag
+                } as IGuild;
+            }))
+    );
+
+    const putRequests = guilds.map((guild) => {
+        return {
+            PutRequest: {
+                Item: {
+                    type: 'guild',
+                    id: guild.id,
+                    data: guild,
+                    updatedAt: Date.now()
+                }
+            }
+        }
+    });
+
+    const requestItemsPerTable = tableNames.reduce((acc, tableName) => {
+        return {
+            ...acc,
+            [tableName]: putRequests
+        };
+    }, {} as BatchWriteCommandInput['RequestItems'])
+
+    await dynamoDb.batchWrite({
+        RequestItems: requestItemsPerTable
+    });
+
+    return {
+        statusCode: 200,
+        body: 'ok'
+    };
+}

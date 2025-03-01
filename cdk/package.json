@@ -9,8 +9,8 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "deploy": "WVWGG_STAGE=prod cdk deploy WvWGG-Dns WvWGG-Prod",
-    "deploy:dev": "WVWGG_STAGE=dev cdk deploy WvWGG-Dns WvWGG-Dev",
+    "deploy": "WVWGG_STAGE=prod cdk deploy WvWGG-Automation WvWGG-Dns WvWGG-Prod",
+    "deploy:dev": "WVWGG_STAGE=dev cdk deploy WvWGG-Automation WvWGG-Dns WvWGG-Dev",
     "deploy:automation": "cdk deploy WvWGG-Automation"
   },
   "devDependencies": {

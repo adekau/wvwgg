@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import path from 'node:path';
+import { AutomationStack } from './automation-stack';
 import { NextJsAssets } from './constructs/assets';
 import { NextJsBuild } from './constructs/build';
 import { NextJsDistribution } from './constructs/distribution';
@@ -16,6 +17,7 @@ interface WvWGGStackProps extends cdk.StackProps {
   certificate: acm.Certificate;
   stage: 'dev' | 'prod';
   domainNames: string[];
+  automationStack: AutomationStack;
 }
 
 export class WvWGGStack extends cdk.Stack {
@@ -32,6 +34,7 @@ export class WvWGGStack extends cdk.Stack {
       sortKey: { name: 'id', type: cdk.aws_dynamodb.AttributeType.STRING },
       billing: cdk.aws_dynamodb.Billing.onDemand()
     });
+    dynamoDbTable.grantReadWriteData(props.automationStack.getGuildBatchLambda);
 
     const nextJsLambda = new lambda.DockerImageFunction(this, `WvWGGNextJsLambda-${props.stage}`, {
       code: build.nextJsImage,
@@ -112,8 +115,11 @@ export class WvWGGStack extends cdk.Stack {
     });
     nextJsDistribution.node.addDependency(nextJsLambda);
 
-    new cdk.CfnOutput(this, `WvWGGCloudFrontUrl-${props.stage}`, {
+    new cdk.CfnOutput(this, `WvWGGCloudFrontUrl`, {
       value: nextJsDistribution.distribution.domainName
+    });
+    new cdk.CfnOutput(this, `WvWGGDynamoDbTableName`, {
+      value: dynamoDbTable.tableName
     });
   }
 }

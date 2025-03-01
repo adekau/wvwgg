@@ -25,6 +25,7 @@ if (process.env.WVWGG_STAGE === 'dev') {
     certificate: dnsStack.certificate,
     stage: 'dev',
     domainNames: ['beta.wvw.gg'],
+    automationStack,
     env: {
       region: 'us-east-1'
     }
@@ -38,6 +39,7 @@ if (process.env.WVWGG_STAGE === 'prod') {
     certificate: dnsStack.certificate,
     stage: 'prod',
     domainNames: ['wvw.gg', 'www.wvw.gg'],
+    automationStack,
     env: {
       region: 'us-east-1'
     }

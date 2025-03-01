@@ -6,12 +6,8 @@ import { useAtomValue } from "jotai";
 import { worldTableColumns } from "./world-table-columns";
 import { useMemo, useState } from "react";
 
-// interface DataTableProps<TData, TValue> {
-//     columns: ColumnDef<TData, TValue>[]
-//     data: TData[]
-// }
-
 export default function WorldTable() {
+    'use no memo';
     const matches = useAtomValue(matchesAtom);
     const [sorting, setSorting] = useState<SortingState>([])
     const data = useMemo(() => Object.values(matches).flatMap((m) => [{ ...m.red, id: m.id }, { ...m.blue, id: m.id }, { ...m.green, id: m.id }]), [matches]);

@@ -9,6 +9,8 @@ import lambdaNode = cdk.aws_lambda_nodejs;
 import lambda = cdk.aws_lambda;
 
 export class AutomationStack extends Stack {
+    public readonly getGuildBatchLambda: lambdaNode.NodejsFunction;
+
     constructor(scope: Construct, id: string, props: StackProps) {
         super(scope, id, props);
 
@@ -33,10 +35,27 @@ export class AutomationStack extends Stack {
         getWvwGuildsLambda.node.addDependency(bucket);
         bucket.grantWrite(getWvwGuildsLambda);
 
+        this.getGuildBatchLambda = new lambdaNode.NodejsFunction(this, 'get-guild-batch-lambda', {
+            entry: path.join(__dirname, '../lambda/get-guild-batch.ts'),
+            runtime: lambda.Runtime.NODEJS_22_X,
+            handler: 'handler',
+            timeout: cdk.Duration.seconds(30),
+            environment: {
+                REGION: this.region,
+                ANET_GUILD_ENDPOINT: 'https://api.guildwars2.com/v2/guild',
+            }
+        });
+
         const getWvwGuilds = new sfnTasks.LambdaInvoke(this, 'get-wvw-guilds', {
             lambdaFunction: getWvwGuildsLambda
         });
         getWvwGuilds.node.addDependency(getWvwGuildsLambda);
+
+        // TODO: add step to loop over the count of guilds and call a lambda to get the guilds with a batch size of 40 every 10 seconds
+        // const getWvwGuildsLoop = new sfn.Map(this, 'get-wvw-guilds-loop', {
+        //     maxConcurrency: 1
+        // });
+        // getWvwGuildsLoop.addIterator()
 
         const populateWvwGuildsMachine = new sfn.StateMachine(this, 'populate-wvw-guilds', {
             definitionBody: sfn.DefinitionBody.fromChainable(getWvwGuilds)

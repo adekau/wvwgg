@@ -3,54 +3,39 @@ import { IWvwGuildsResponse } from "../../shared/interfaces/wvw-guilds-response.
 
 interface IGetWvwGuildsEvent {
     wvwRegion: string;
-    fileName?: string;
+    filePrefix?: string;
+    batchSize?: number;
 }
 
 const REGION = process.env.REGION;
 const WVW_GUILDS_ENDPOINT = process.env.WVW_GUILDS_ENDPOINT;
 const BUCKET_NAME = process.env.BUCKET_NAME;
 const s3Client = new S3Client({ region: REGION });
+const DEFAULT_BATCH_SIZE = 2500;
 
 export const handler = async (event: IGetWvwGuildsEvent) => {
-    const { wvwRegion, fileName } = event;
+    const { wvwRegion, filePrefix, batchSize } = event;
 
     const guilds: IWvwGuildsResponse = await fetch(`${WVW_GUILDS_ENDPOINT}/${wvwRegion}`).then(res => res.json());
 
-    const command = new PutObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: fileName ?? `${wvwRegion}.json`,
-        Body: JSON.stringify(guilds)
-    });
+    const guildEntries = Object.entries(guilds);
+    let batchNumber = 0;
+    for (let i = 0; i < guildEntries.length; i += batchSize ?? DEFAULT_BATCH_SIZE) {
+        const guildsToSave = guildEntries.slice(i, i + (batchSize ?? DEFAULT_BATCH_SIZE)).map(([guildId, worldId]) => ({ guildId, worldId }));
 
-    await s3Client.send(command);
+        const command = new PutObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: `${wvwRegion}/${filePrefix ? `${filePrefix}-` : ''}${++batchNumber}.json`,
+            Body: JSON.stringify(guildsToSave)
+        });
+        await s3Client.send(command);
+    }
 
-    // start with 100 guilds to test
-    // const guildEntries = Object.entries(guilds).slice(0, 100);
-    // for (let i = 0; i < guildEntries.length; i += 25) {
-    //     const batch = guildEntries.slice(i, i + 25);
-    //     await dynamoDb.batchWrite({
-    //         RequestItems: {
-    //             [tableNames[0]]: batch.map(([guildId, allianceWorldId]) => {
-    //                 return {
-    //                     PutRequest: {
-    //                         Item: {
-    //                             type: 'guild',
-    //                             id: guildId,
-    //                             data: {
-    //                                 allianceWorldId
-    //                             },
-    //                             updatedAt: Date.now()
-    //                         }
-    //                     }
-    //                 }
-    //             })
-    //         }
-    //     });
-    // }
     return {
         statusCode: 200,
         body: { 
             count: Object.keys(guilds).length,
+            batchCount: batchNumber,
             wvwRegion
         }
     };
