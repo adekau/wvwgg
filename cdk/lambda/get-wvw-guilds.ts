@@ -1,4 +1,5 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { IBaseGuild } from "../../shared/interfaces/base-guild.interface";
 import { IWvwGuildsResponse } from "../../shared/interfaces/wvw-guilds-response.interface";
 
 interface IGetWvwGuildsEvent {
@@ -21,7 +22,9 @@ export const handler = async (event: IGetWvwGuildsEvent) => {
     const guildEntries = Object.entries(guilds);
     let batchNumber = 0;
     for (let i = 0; i < guildEntries.length; i += batchSize ?? DEFAULT_BATCH_SIZE) {
-        const guildsToSave = guildEntries.slice(i, i + (batchSize ?? DEFAULT_BATCH_SIZE)).map(([guildId, worldId]) => ({ guildId, worldId }));
+        const guildsToSave = guildEntries
+            .slice(i, i + (batchSize ?? DEFAULT_BATCH_SIZE))
+            .map(([guildId, worldId]) => ({ guildId, worldId: parseInt(worldId, 10) } as IBaseGuild));
 
         const command = new PutObjectCommand({
             Bucket: BUCKET_NAME,
@@ -33,7 +36,7 @@ export const handler = async (event: IGetWvwGuildsEvent) => {
 
     return {
         statusCode: 200,
-        body: { 
+        body: {
             count: Object.keys(guilds).length,
             batchCount: batchNumber,
             wvwRegion

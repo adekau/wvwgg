@@ -6,7 +6,9 @@ import { IGuild } from "../../shared/interfaces/guild.interface";
 
 interface IGuildBatchEvent {
     Items: IBaseGuild[];
-    tableNames: string[];
+    BatchInput: {
+        tableNames: string[];
+    };
 }
 
 const REGION = process.env.REGION;
@@ -14,32 +16,40 @@ const ANET_GUILD_ENDPOINT = process.env.ANET_GUILD_ENDPOINT;
 const dynamoDb = DynamoDBDocument.from(new DynamoDB({ region: REGION }));
 
 export async function handler(event: IGuildBatchEvent) {
-    const { Items, tableNames } = event;
+
+    const { Items, BatchInput: { tableNames } } = event;
     const guilds = await Promise.all(
-        Items.map(({ id, worldId }) => fetch(`${ANET_GUILD_ENDPOINT}/${id}`)
+        Items.map(({ guildId, worldId }) => fetch(`${ANET_GUILD_ENDPOINT}/${guildId}`)
             .then<IGuildResponse>((x) => x.json())
             .then((guildResponse) => {
+                if (!validateGuildResponse(guildResponse)) {
+                    console.error(`Invalid guild response for guild ${guildId}`, JSON.stringify(guildResponse, null, 2));
+                    return undefined;
+                }
+
                 return {
-                    id,
-                    worldId,
+                    id: guildResponse.id,
+                    worldId: worldId,
                     name: guildResponse.name,
                     tag: guildResponse.tag
                 } as IGuild;
             }))
     );
 
-    const putRequests = guilds.map((guild) => {
-        return {
-            PutRequest: {
-                Item: {
-                    type: 'guild',
-                    id: guild.id,
-                    data: guild,
-                    updatedAt: Date.now()
+    const putRequests = guilds
+        .filter((guild) => guild != null)
+        .map((guild) => {
+            return {
+                PutRequest: {
+                    Item: {
+                        type: 'guild',
+                        id: guild.id,
+                        data: guild,
+                        updatedAt: Date.now()
+                    }
                 }
             }
-        }
-    });
+        });
 
     const requestItemsPerTable = tableNames.reduce((acc, tableName) => {
         return {
@@ -56,4 +66,12 @@ export async function handler(event: IGuildBatchEvent) {
         statusCode: 200,
         body: 'ok'
     };
+}
+
+function validateGuildResponse(x: any): x is IGuildResponse {
+    return typeof x === 'object' &&
+        x !== null &&
+        typeof x.id === 'string' &&
+        typeof x.name === 'string' &&
+        typeof x.tag === 'string';
 }

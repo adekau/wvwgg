@@ -1,4 +1,4 @@
 export interface IBaseGuild {
-    id: string;
+    guildId: string;
     worldId: number;
 }
