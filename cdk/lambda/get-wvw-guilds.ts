@@ -39,6 +39,7 @@ export const handler = async (event: IGetWvwGuildsEvent) => {
         body: {
             count: Object.keys(guilds).length,
             batchCount: batchNumber,
+            fileNames: Array.from({ length: batchNumber }).map((_, i) => `${wvwRegion}/${filePrefix ? `${filePrefix}-` : ''}${i + 1}.json`),
             wvwRegion
         }
     };

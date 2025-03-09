@@ -2,9 +2,9 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import path from 'node:path';
 import { AutomationStack } from './automation-stack';
-import { NextJsAssets } from './constructs/assets';
-import { NextJsBuild } from './constructs/build';
-import { NextJsDistribution } from './constructs/distribution';
+import { WvWGGAssets } from './constructs/assets';
+import { WvWGGBuild } from './constructs/build';
+import { WvWGGDistribution } from './constructs/distribution';
 import lambda = cdk.aws_lambda;
 import lambdaNodejs = cdk.aws_lambda_nodejs;
 import events = cdk.aws_events;
@@ -24,7 +24,7 @@ export class WvWGGStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: WvWGGStackProps) {
     super(scope, id, props);
 
-    const build = new NextJsBuild(this, 'WvWGGNextJsBuild', {
+    const build = new WvWGGBuild(this, 'WvWGGNextJsBuild', {
       buildCommand: 'npm run build',
       contextPath: path.join(__dirname, '../../web2')
     });
@@ -56,6 +56,7 @@ export class WvWGGStack extends cdk.Stack {
     // depends on the table being created first
     nextJsLambda.node.addDependency(dynamoDbTable);
     nextJsLambda.node.addDependency(build);
+    dynamoDbTable.grantReadData(nextJsLambda);
 
     const fetchMatchesLambda = new lambdaNodejs.NodejsFunction(this, `WvWGGFetchMatchesLambda-${props.stage}`, {
       entry: path.join(__dirname, '../lambda/get-matches.ts'),
@@ -65,10 +66,12 @@ export class WvWGGStack extends cdk.Stack {
       environment: {
         TABLE_NAME: dynamoDbTable.tableName,
         ANET_MATCHES_ENDPOINT: 'https://api.guildwars2.com/v2/wvw/matches?ids=all',
+        ANET_WORLDS_ENDPOINT: 'https://api.guildwars2.com/v2/worlds?ids=all',
         REGION: this.region
       }
     });
     fetchMatchesLambda.node.addDependency(dynamoDbTable);
+    dynamoDbTable.grantReadWriteData(fetchMatchesLambda);
 
     const fetchWorldsLambda = new lambdaNodejs.NodejsFunction(this, `WvWGGFetchWorldsLambda-${props.stage}`, {
       entry: path.join(__dirname, '../lambda/get-worlds.ts'),
@@ -76,20 +79,17 @@ export class WvWGGStack extends cdk.Stack {
       handler: 'handler',
       timeout: cdk.Duration.seconds(15),
       environment: {
-        TABLE_NAME: dynamoDbTable.tableName,
         ANET_WORLDS_ENDPOINT: 'https://api.guildwars2.com/v2/worlds?ids=all',
+        TABLE_NAME: dynamoDbTable.tableName,
         REGION: this.region
       }
     });
     fetchWorldsLambda.node.addDependency(dynamoDbTable);
-
-    dynamoDbTable.grantReadWriteData(nextJsLambda);
-    dynamoDbTable.grantReadWriteData(fetchMatchesLambda);
     dynamoDbTable.grantReadWriteData(fetchWorldsLambda);
 
     const fetchMatchesRule = new events.Rule(this, 'WvWGGFetchMatchesRule', {
       schedule: events.Schedule.rate(cdk.Duration.seconds(60)),
-      targets: [new eventTargets.LambdaFunction(fetchMatchesLambda)]
+      targets: [new eventTargets.LambdaFunction(fetchMatchesLambda)],
     });
     fetchMatchesRule.node.addDependency(fetchMatchesLambda);
 
@@ -99,13 +99,13 @@ export class WvWGGStack extends cdk.Stack {
     });
     fetchWorldsRule.node.addDependency(fetchWorldsLambda);
 
-    const nextJsAssets = new NextJsAssets(this, `WvWGGNextJsAssets-${props.stage}`, {
+    const nextJsAssets = new WvWGGAssets(this, `WvWGGNextJsAssets-${props.stage}`, {
       buildImageDigest: build.buildImageDigest,
       stage: props.stage
     });
     nextJsAssets.node.addDependency(build);
 
-    const nextJsDistribution = new NextJsDistribution(this, `WvWGGNextJsDistribution-${props.stage}`, {
+    const nextJsDistribution = new WvWGGDistribution(this, `WvWGGNextJsDistribution-${props.stage}`, {
       nextJsLambda,
       nextJsAssetsBucket: nextJsAssets.bucket,
       domainNames: props.domainNames,

@@ -1,7 +1,8 @@
 import { Provider as JotaiProvider } from "jotai";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { getMatches, getMatchesData, getWorlds } from "../server/queries";
+import { formatMatches } from '../../shared/util/format-matches';
+import { getMatches, getWorlds } from "../server/queries";
 import { ThemeProvider } from "./components/theme-provider";
 import "./globals.css";
 import MatchesProvider from "./providers/matches-provider";
@@ -26,7 +27,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const matches = getMatchesData(await getMatches(), await getWorlds());
+  const matches = (await getMatches()) ?? {};
 
   return (
     <html lang="en" suppressHydrationWarning>

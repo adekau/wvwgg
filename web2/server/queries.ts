@@ -1,9 +1,10 @@
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocument } from "@aws-sdk/lib-dynamodb";
 import { unstable_cache } from "next/cache";
-import { IFormattedMatch } from '../../shared/interfaces/formatted-match.interface';
-import { IWorld } from '../../shared/interfaces/world.interface';
-import { MatchId } from "../../shared/interfaces/match-id.type";
+import { IFormattedMatch } from "@shared/interfaces/formatted-match.interface";
+import { MatchId } from "@shared/interfaces/match-id.type";
+import { IMatchResponse } from "@shared/interfaces/match-response.interface";
+import { formatMatches } from "@shared/util/format-matches";
 import j from './tmp-alliance-worlds.json' with { type: 'json' };
 
 const STAGE = process.env.WVWGG_STAGE;
@@ -43,13 +44,19 @@ export const getMatchesDb = unstable_cache(async () => {
             id: 'all'
         },
     });
-    return res.Item?.data;
+    return res.Item?.data as Record<MatchId, IFormattedMatch> | undefined;
 }, ['matches'], { revalidate: 60 });
 
 export const getMatchesAnet = async () => {
     console.log('Getting matches (anet)');
     const res = await fetch('https://api.guildwars2.com/v2/wvw/matches?ids=all', { cache: 'force-cache', next: { revalidate: 60, tags: ['matches'] } });
-    return await res.json();
+    const matchesResponse: IMatchResponse[] = await res.json();
+    const worlds = await getWorlds();
+    if (!worlds) {
+        return undefined;
+    }
+    const formatted = formatMatches(matchesResponse, worlds);
+    return formatted;
 }
 
 export const getWorlds = unstable_cache(async () => {
@@ -71,51 +78,3 @@ export const getWorlds = unstable_cache(async () => {
             .then((data) => [...data, ...j]);
     }
 }, ['worlds'], { revalidate: 60 * 60 * 10 });
-
-function getAllianceWorld(worldId: number, worlds: IWorld[]): IWorld | undefined {
-    return worlds.find((x) => x.associated_world_id === worldId);
-}
-
-export function getMatchesData(matches: Record<string, any>[], worlds: IWorld[]): Record<MatchId, IFormattedMatch> {
-    return matches.reduce((acc: Record<string, any>, match: any) => {
-        const redWorld = getAllianceWorld(match.worlds?.red, worlds);
-        const blueWorld = getAllianceWorld(match.worlds?.blue, worlds);
-        const greenWorld = getAllianceWorld(match.worlds?.green, worlds);
-        if (!redWorld || !blueWorld || !greenWorld) {
-            throw new Error('A world could not be found');
-        }
-
-        return {
-            ...acc, [match.id]: {
-                id: match.id,
-                red: {
-                    world: redWorld,
-                    kills: match.kills?.red,
-                    deaths: match.deaths?.red,
-                    activity: match.kills?.red + match.deaths?.red,
-                    ratio: Math.trunc(((match.kills?.red ?? 0) / (match.deaths?.red ?? 1)) * 100) / 100,
-                    victoryPoints: match.victory_points?.red,
-                    skirmishScore: match.skirmishes ? match.skirmishes[match.skirmishes.length - 1].scores.red : 0
-                },
-                blue: {
-                    world: blueWorld,
-                    kills: match.kills?.blue,
-                    deaths: match.deaths?.blue,
-                    activity: match.kills?.blue + match.deaths?.blue,
-                    ratio: Math.trunc(((match.kills?.blue ?? 0) / (match.deaths?.blue ?? 1)) * 100) / 100,
-                    victoryPoints: match.victory_points?.blue,
-                    skirmishScore: match.skirmishes ? match.skirmishes[match.skirmishes.length - 1].scores.blue : 0
-                },
-                green: {
-                    world: greenWorld,
-                    kills: match.kills?.green,
-                    deaths: match.deaths?.green,
-                    activity: match.kills?.green + match.deaths?.green,
-                    ratio: Math.trunc(((match.kills?.green ?? 0) / (match.deaths?.green ?? 1)) * 100) / 100,
-                    victoryPoints: match.victory_points?.green,
-                    skirmishScore: match.skirmishes ? match.skirmishes[match.skirmishes.length - 1].scores.green : 0
-                }
-            } satisfies IFormattedMatch
-        }
-    }, {});
-}

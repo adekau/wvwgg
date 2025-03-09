@@ -8,7 +8,7 @@ export interface NextJsBuildProps {
     contextPath: string;
 }
 
-export class NextJsBuild extends Construct {
+export class WvWGGBuild extends Construct {
     public buildImageDigest: string;
     public props: NextJsBuildProps;
     public nextJsImage: cdk.aws_lambda.DockerImageCode;

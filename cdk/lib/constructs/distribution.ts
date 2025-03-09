@@ -17,7 +17,7 @@ export interface NextJsDistributionProps {
     stage: 'dev' | 'prod';
 }
 
-export class NextJsDistribution extends Construct {
+export class WvWGGDistribution extends Construct {
     public functionUrl: lambda.FunctionUrl;
     public distribution: cloudfront.Distribution;
 

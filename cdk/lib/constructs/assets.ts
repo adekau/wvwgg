@@ -11,7 +11,7 @@ export interface NextJsAssetsProps {
   stage: 'dev' | 'prod';
 }
 
-export class NextJsAssets extends Construct {
+export class WvWGGAssets extends Construct {
   public readonly bucket: s3.Bucket;
   public readonly bucketDeployment: s3deploy.BucketDeployment;
 
