@@ -1,9 +1,9 @@
 'use client';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
+import { MatchId } from "@shared/interfaces/match-id.type";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect } from "react";
-import { MatchId } from "../../../../../shared/interfaces/match-id.type";
 import { ThemeToggle } from "../../../components/theme-toggle";
 import { matchesAtom, selectedMatchAtom } from "../../../providers/matches-atom";
 
@@ -50,7 +50,6 @@ export function MatchDisplay({ matchId }: MatchDisplayProps) {
       {match ? (
         <div className="overflow-y-auto p-4 bg-muted rounded-lg m-4">
           <pre>{JSON.stringify(match, null, 2)}</pre>
-          <div>Hello</div>
         </div>
       ) : (
         <div className="p-4 text-center text-muted-foreground">

@@ -5,7 +5,7 @@ import path from "node:path";
 
 export interface NextJsBuildProps {
     buildCommand: string;
-    contextPath: string;
+    contextPaths: Record<string, string>;
 }
 
 export class WvWGGBuild extends Construct {
@@ -29,8 +29,9 @@ export class WvWGGBuild extends Construct {
             BUILD_COMMAND: this.props.buildCommand ?? 'npm run build'
         };
         const buildArgsString = this.getBuildArgsString(buildArgs);
+        const contextPathsString = this.getContextPathsString(this.props.contextPaths);
         const dockerfilePath = path.join(__dirname, 'builder.Dockerfile');
-        const command = `docker build -t ${builderImageTag} -f ${dockerfilePath} ${buildArgsString} ${this.props.contextPath}`;
+        const command = `docker build -t ${builderImageTag} -f ${dockerfilePath} ${buildArgsString} ${contextPathsString} .`;
 
         // Create the docker image
         try {
@@ -65,6 +66,12 @@ export class WvWGGBuild extends Construct {
     private getBuildArgsString(buildArgs: Record<string, string>) {
         return Object.entries(buildArgs)
             .map(([key, value]) => `--build-arg '${key}=${value}'`)
+            .join(' ');
+    }
+
+    private getContextPathsString(contextPaths: Record<string, string>) {
+        return Object.entries(contextPaths)
+            .map(([key, value]) => `--build-context ${key}=${value}`)
             .join(' ');
     }
 

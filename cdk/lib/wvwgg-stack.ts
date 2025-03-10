@@ -26,7 +26,10 @@ export class WvWGGStack extends cdk.Stack {
 
     const build = new WvWGGBuild(this, 'WvWGGNextJsBuild', {
       buildCommand: 'npm run build',
-      contextPath: path.join(__dirname, '../../web2')
+      contextPaths: {
+        'nextjs': path.join(__dirname, '../../web2'),
+        'shared': path.join(__dirname, '../../shared')
+      }
     });
 
     const dynamoDbTable = new cdk.aws_dynamodb.TableV2(this, `WvWGGTable-${props.stage}`, {
