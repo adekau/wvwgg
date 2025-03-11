@@ -1,4 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import path from 'node:path';
 import { AutomationStack } from './automation-stack';
@@ -37,7 +38,10 @@ export class WvWGGStack extends cdk.Stack {
       sortKey: { name: 'id', type: cdk.aws_dynamodb.AttributeType.STRING },
       billing: cdk.aws_dynamodb.Billing.onDemand()
     });
-    dynamoDbTable.grantReadWriteData(props.automationStack.getGuildBatchLambda);
+    props.automationStack.getGuildBatchLambda.addToRolePolicy(new PolicyStatement({
+      actions: ['dynamodb:BatchWriteItem'],
+      resources: [dynamoDbTable.tableArn]
+    }));
 
     const nextJsLambda = new lambda.DockerImageFunction(this, `WvWGGNextJsLambda-${props.stage}`, {
       code: build.nextJsImage,
