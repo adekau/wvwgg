@@ -28,7 +28,7 @@ export class WvWGGStack extends cdk.Stack {
     const build = new WvWGGBuild(this, 'WvWGGNextJsBuild', {
       buildCommand: 'npm run build',
       contextPaths: {
-        'nextjs': path.join(__dirname, '../../web2'),
+        'nextjs': path.join(__dirname, '../../web'),
         'shared': path.join(__dirname, '../../shared')
       }
     });
