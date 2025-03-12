@@ -19,8 +19,7 @@ const ddbClient = new DynamoDB({
         sessionToken: process.env.AWS_SESSION_TOKEN || ''
     }
 });
-
-const ddbDocClient = DynamoDBDocument.from(ddbClient);
+const db = DynamoDBDocument.from(ddbClient);
 
 export const getMatches = async () => {
     try {
@@ -37,7 +36,7 @@ export const getMatches = async () => {
 
 export const getMatchesDb = unstable_cache(async () => {
     console.log('Getting matches (db)');
-    const res = await ddbDocClient.get({
+    const res = await db.get({
         TableName: TABLE_NAME,
         Key: {
             type: 'matches',
@@ -62,7 +61,7 @@ export const getMatchesAnet = async () => {
 export const getWorlds = unstable_cache(async () => {
     console.log('Getting worlds');
     try {
-        return await ddbDocClient.get({
+        return await db.get({
             TableName: TABLE_NAME,
             Key: {
                 type: 'worlds',

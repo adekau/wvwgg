@@ -1,11 +1,11 @@
 'use client';
+import { ThemeToggle } from "@/app/components/theme-toggle";
+import { matchesAtom, selectedMatchAtom } from "@/app/providers/matches-atom";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { MatchId } from "@shared/interfaces/match-id.type";
 import { useAtom, useAtomValue } from "jotai";
 import { useEffect } from "react";
-import { ThemeToggle } from "../../../components/theme-toggle";
-import { matchesAtom, selectedMatchAtom } from "../../../providers/matches-atom";
 
 interface MatchDisplayProps {
   matchId: MatchId;

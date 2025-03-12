@@ -1,11 +1,15 @@
+import { ResizableHandle } from "@/components/ui/resizable";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Provider as JotaiProvider } from "jotai";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { formatMatches } from '../../shared/util/format-matches';
-import { getMatches, getWorlds } from "../server/queries";
+import { getMatches } from "../server/queries";
+import { MainLayout } from "./components/main-layout";
+import { MainNav } from "./components/main-nav";
 import { ThemeProvider } from "./components/theme-provider";
 import "./globals.css";
 import MatchesProvider from "./providers/matches-provider";
+import { getUserPreferences } from "./util/user-preferences";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,9 +28,12 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  content
 }: Readonly<{
   children: React.ReactNode;
+  content: React.ReactNode;
 }>) {
+  const { layout, collapsed } = await getUserPreferences();
   const matches = (await getMatches()) ?? {};
 
   return (
@@ -42,7 +49,15 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <TooltipProvider delayDuration={0}>
+              <MainLayout>
+                <MainNav defaultLayout={layout} navCollapsedSize={1} defaultCollapsed={collapsed} />
+                <ResizableHandle withHandle />
+                {children}
+                <ResizableHandle withHandle />
+                {content}
+              </MainLayout>
+            </TooltipProvider>
           </ThemeProvider>
         </JotaiProvider>
       </body>

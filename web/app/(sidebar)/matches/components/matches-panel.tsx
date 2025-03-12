@@ -1,5 +1,5 @@
 'use client';
-import { MatchList } from "@/app/(wvwgg)/matches/components/match-list";
+import { MatchList } from "@/app/(sidebar)/matches/components/match-list";
 import { matchesAtom } from "@/app/providers/matches-atom";
 import { ResizablePanel } from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";

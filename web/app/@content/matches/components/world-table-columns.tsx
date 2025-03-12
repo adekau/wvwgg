@@ -1,10 +1,10 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import { IFormattedMatchWorld } from '@shared/interfaces/formatted-match-world.interface';
+import { MatchId } from '@shared/interfaces/match-id.type';
 import { Column, ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import { ReactNode } from 'react';
-import { IFormattedMatchWorld } from '../../../../../../shared/interfaces/formatted-match-world.interface';
-import { MatchId } from '../../../../../../shared/interfaces/match-id.type';
 
 export interface IWorldTableRow extends IFormattedMatchWorld {
     id: MatchId;

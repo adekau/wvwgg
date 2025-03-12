@@ -1,8 +1,8 @@
+import { selectedMatchAtom } from "@/app/providers/matches-atom"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { useAtom } from "jotai"
 import Link from "next/link"
-import { selectedMatchAtom } from "../../../providers/matches-atom"
 
 interface MatchListProps {
   matches: any

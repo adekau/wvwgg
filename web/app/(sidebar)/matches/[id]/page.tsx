@@ -1,6 +1,6 @@
-import MatchesPage from "../page";
-import { getMatches } from '../../../../server/queries';
+import { getMatches } from "@/server/queries";
 import { IFormattedMatch } from "@shared/interfaces/formatted-match.interface";
+import MatchesPage from "../page";
 
 export const dynamicParams = false;
 
