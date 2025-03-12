@@ -18,53 +18,64 @@ const dynamoDb = DynamoDBDocument.from(new DynamoDB({ region: REGION }));
 export async function handler(event: IGuildBatchEvent) {
 
     const { Items, BatchInput: { tableNames } } = event;
-    const guilds = await Promise.all(
-        Items.map(({ guildId, worldId }) => fetch(`${ANET_GUILD_ENDPOINT}/${guildId}`)
-            .then<IGuildResponse>((x) => x.json())
-            .then((guildResponse) => {
-                if (!validateGuildResponse(guildResponse)) {
-                    console.error(`Invalid guild response for guild ${guildId}`, JSON.stringify(guildResponse, null, 2));
-                    return undefined;
-                }
+    try {
+        const guilds = await Promise.all(
+            Items.map(({ guildId, worldId }) => fetch(`${ANET_GUILD_ENDPOINT}/${guildId}`)
+                .then<IGuildResponse>((x) => x.json().catch((e) => {
+                    console.error(`Error parsing JSON for guild ${guildId}`, e);
+                    throw e;
+                }))
+                .then((guildResponse) => {
+                    if (!validateGuildResponse(guildResponse)) {
+                        console.error(`Invalid guild response for guild ${guildId}`, JSON.stringify(guildResponse, null, 2));
+                        return undefined;
+                    }
 
+                    return {
+                        id: guildResponse.id,
+                        worldId: worldId,
+                        name: guildResponse.name,
+                        tag: guildResponse.tag
+                    } as IGuild;
+                }))
+        );
+
+        const putRequests = guilds
+            .filter((guild) => guild != null)
+            .map((guild) => {
                 return {
-                    id: guildResponse.id,
-                    worldId: worldId,
-                    name: guildResponse.name,
-                    tag: guildResponse.tag
-                } as IGuild;
-            }))
-    );
-
-    const putRequests = guilds
-        .filter((guild) => guild != null)
-        .map((guild) => {
-            return {
-                PutRequest: {
-                    Item: {
-                        type: 'guild',
-                        id: guild.id,
-                        data: guild,
-                        updatedAt: Date.now()
+                    PutRequest: {
+                        Item: {
+                            type: 'guild',
+                            id: guild.id,
+                            data: guild,
+                            updatedAt: Date.now()
+                        }
                     }
                 }
-            }
+            });
+
+        const requestItemsPerTable = tableNames.reduce((acc, tableName) => {
+            return {
+                ...acc,
+                [tableName]: putRequests
+            };
+        }, {} as BatchWriteCommandInput['RequestItems'])
+
+        await dynamoDb.batchWrite({
+            RequestItems: requestItemsPerTable
         });
-
-    const requestItemsPerTable = tableNames.reduce((acc, tableName) => {
+    } catch (error) {
+        console.error(error);
         return {
-            ...acc,
-            [tableName]: putRequests
+            statusCode: 500,
+            body: JSON.stringify({ message: error instanceof Error ? error.message : 'Internal server error' })
         };
-    }, {} as BatchWriteCommandInput['RequestItems'])
-
-    await dynamoDb.batchWrite({
-        RequestItems: requestItemsPerTable
-    });
+    }
 
     return {
         statusCode: 200,
-        body: 'ok'
+        body: JSON.stringify({ message: 'ok' })
     };
 }
 

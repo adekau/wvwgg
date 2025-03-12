@@ -1,5 +1,4 @@
 import { Duration, aws_lambda as lambda, aws_lambda_nodejs as lambdaNode, aws_s3 as s3, aws_stepfunctions as sfn, aws_stepfunctions_tasks as sfnTasks } from 'aws-cdk-lib';
-import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { DefinitionBody, QueryLanguage, S3JsonItemReader, StateMachine } from "aws-cdk-lib/aws-stepfunctions";
 import { Construct } from "constructs";
 import path from "path";
@@ -48,10 +47,11 @@ export class WvWGGSyncGuildsStepFunction extends Construct {
 
     private createBatchesMap() {
         const map = new sfn.Map(this, 'create-batches-map', {
-            maxConcurrency: 1
+            maxConcurrency: 1,
+            outputs: {} // prevent output from going to next state so the data limit is not exceeded
         });
         const processBatchesMap = this.processBatchesMap();
-        map.itemProcessor(processBatchesMap, { mode: sfn.ProcessorMode.INLINE });
+        map.itemProcessor(processBatchesMap, { mode: sfn.ProcessorMode.INLINE, executionType: sfn.ProcessorType.EXPRESS });
         return map;
     }
 
@@ -59,7 +59,7 @@ export class WvWGGSyncGuildsStepFunction extends Construct {
         const map = new sfn.DistributedMap(this, 'process-batches-map', {
             queryLanguage: QueryLanguage.JSONATA,
             maxConcurrency: 1,
-            mapExecutionType: sfn.StateMachineType.STANDARD,
+            mapExecutionType: sfn.StateMachineType.EXPRESS,
             itemReader: new S3JsonItemReader({
                 bucket: this.props.bucket,
                 key: '{% $states.input %}'
@@ -70,7 +70,9 @@ export class WvWGGSyncGuildsStepFunction extends Construct {
                 batchInput: {
                     tableNames: '{% $tableNames %}'
                 }
-            })
+            }),
+            outputs: {}, // prevent output from going to next state so the data limit is not exceeded
+            toleratedFailurePercentage: 5
         });
         // TODO: remove magic numbers
         const waitState = new sfn.Wait(this, 'wait', {
@@ -79,7 +81,7 @@ export class WvWGGSyncGuildsStepFunction extends Construct {
         });
         const getGuildBatch = this.getGuildBatchLambda();
         // STANDARD should probably be changed to EXPRESS later to cost optimize
-        map.itemProcessor(waitState.next(getGuildBatch), { mode: sfn.ProcessorMode.DISTRIBUTED, executionType: sfn.ProcessorType.STANDARD });
+        map.itemProcessor(waitState.next(getGuildBatch), { mode: sfn.ProcessorMode.DISTRIBUTED, executionType: sfn.ProcessorType.EXPRESS });
 
         return map;
     }
