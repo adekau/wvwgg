@@ -10,7 +10,7 @@ export default function MatchesProvider({ matches }: { matches: Record<MatchId, 
 
     useEffect(() => {
         setMatches({ ...matches });
-    }, [matches]);
+    }, [matches, setMatches]);
 
     return null;
 }

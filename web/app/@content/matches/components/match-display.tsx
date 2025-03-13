@@ -20,7 +20,7 @@ export function MatchDisplay({ matchId }: MatchDisplayProps) {
     if (selectedMatch !== matchId) {
       setSelectedMatch(matchId);
     }
-  }, [matchId]);
+  }, [matchId, selectedMatch, setSelectedMatch]);
 
   const splitMatchId = matchId.split('-');
   const naOrEu = splitMatchId[0] === '1' ? 'NA' : 'EU';
