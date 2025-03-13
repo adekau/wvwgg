@@ -39,10 +39,10 @@ export default function MatchesPanel({ layout, selectedMatchFilter }: { layout: 
                     <MatchList matches={Object.values(matches)} />
                 </TabsContent>
                 <TabsContent value="na" className="m-0">
-                    <MatchList matches={Object.values(matches).filter((match: any) => match.id.startsWith('1'))} />
+                    <MatchList matches={Object.values(matches).filter((match) => match.id.startsWith('1'))} />
                 </TabsContent>
                 <TabsContent value="eu" className="m-0">
-                    <MatchList matches={Object.values(matches).filter((match: any) => match.id.startsWith('2'))} />
+                    <MatchList matches={Object.values(matches).filter((match) => match.id.startsWith('2'))} />
                 </TabsContent>
             </Tabs>
         </ResizablePanel>

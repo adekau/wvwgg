@@ -1,18 +1,23 @@
 import { selectedMatchAtom } from '@/app/providers/matches-atom';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { IFormattedMatch } from '@shared/interfaces/formatted-match.interface';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
 
 interface MatchListProps {
-    matches: any;
+    matches: IFormattedMatch[];
 }
 
-function matchSort(a: any, b: any): number {
+function matchSort(a: IFormattedMatch, b: IFormattedMatch): number {
     const [aRegion, aTier] = a.id.split('-');
     const [bRegion, bTier] = b.id.split('-');
-    const aSortNum = aRegion * 100 + aTier;
-    const bSortNum = bRegion * 100 + bTier;
+    const aSortNum = parseInt(aRegion, 10) * 100 + parseInt(aTier, 10);
+    const bSortNum = parseInt(bRegion, 10) * 100 + parseInt(bTier, 10);
+
+    if (isNaN(aSortNum) || isNaN(bSortNum)) {
+        return 0;
+    }
 
     return aSortNum - bSortNum;
 }
@@ -22,7 +27,7 @@ export function MatchList({ matches }: MatchListProps) {
 
     return (
         <div className="h-screen flex flex-col pt-0 overflow-y-auto">
-            {matches.sort(matchSort).map((match: any) => {
+            {matches.sort(matchSort).map((match) => {
                 return (
                     <Link
                         key={match.id}
