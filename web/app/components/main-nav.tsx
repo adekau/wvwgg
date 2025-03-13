@@ -1,9 +1,12 @@
 'use client';
+import { selectedMatchAtom } from '@/app/providers/matches-atom';
 import { ResizablePanel } from '@/components/ui/resizable';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { useAtomValue } from 'jotai';
 import { ClockIcon, ShieldIcon, SwordsIcon, Trophy } from 'lucide-react';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Nav } from './nav';
 
 export function MainNav({
@@ -16,6 +19,12 @@ export function MainNav({
     defaultCollapsed: boolean;
 }) {
     const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+    const selectedMatch = useAtomValue(selectedMatchAtom);
+    const pathname = usePathname();
+
+    useEffect(() => {
+        console.log(pathname);
+    }, [pathname]);
 
     return (
         <ResizablePanel
@@ -41,7 +50,8 @@ export function MainNav({
                         {
                             title: 'WvW.gg',
                             icon: Trophy,
-                            variant: 'logo'
+                            variant: 'logo',
+                            href: '/'
                         }
                     ]}
                 />
@@ -53,20 +63,27 @@ export function MainNav({
                     {
                         title: 'Matches',
                         icon: SwordsIcon,
-                        variant: 'default'
+                        variant: isSelectedNavItem(pathname, '/matches'),
+                        href: `/matches${selectedMatch ? `/${selectedMatch}` : ''}`
                     },
                     {
                         title: 'Guilds',
                         icon: ShieldIcon,
-                        variant: 'ghost'
+                        variant: isSelectedNavItem(pathname, '/guilds'),
+                        href: '/guilds'
                     },
                     {
                         title: 'Timezones',
                         icon: ClockIcon,
-                        variant: 'ghost'
+                        variant: isSelectedNavItem(pathname, '/timezones'),
+                        href: '#notimplemented'
                     }
                 ]}
             />
         </ResizablePanel>
     );
+}
+
+function isSelectedNavItem(pathname: string, href: string) {
+    return pathname.includes(href) ? 'default' : 'ghost';
 }

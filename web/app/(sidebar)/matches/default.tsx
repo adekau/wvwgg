@@ -1,5 +1,5 @@
-import MatchesPage from './page';
+import MatchesSidebar from './page';
 
 export default function MatchesDefault() {
-    return <MatchesPage />;
+    return <MatchesSidebar />;
 }

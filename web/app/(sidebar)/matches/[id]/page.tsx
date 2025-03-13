@@ -1,6 +1,6 @@
 import { getMatches } from '@/server/queries';
 import { IFormattedMatch } from '@shared/interfaces/formatted-match.interface';
-import MatchesPage from '../page';
+import MatchesSidebar from '../page';
 
 export const dynamicParams = false;
 
@@ -13,5 +13,5 @@ export async function generateStaticParams() {
 }
 
 export default function MatchIdPage() {
-    return <MatchesPage />;
+    return <MatchesSidebar />;
 }

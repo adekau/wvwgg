@@ -90,3 +90,29 @@ export const getWorlds = unstable_cache(
     ['worlds'],
     { revalidate: 60 * 60 * 10 }
 );
+
+export const getGuilds = async () => {
+    console.log('Getting guilds');
+    if (!TABLE_NAME) {
+        return undefined;
+    }
+    try {
+        const res = await db.query({
+            TableName: TABLE_NAME,
+            ExpressionAttributeNames: {
+                '#type': 'type',
+                '#data': 'data'
+            },
+            KeyConditionExpression: '#type = :type',
+            ExpressionAttributeValues: {
+                ':type': 'guild'
+            },
+            ProjectionExpression: '#type, #data',
+            Limit: 10
+        });
+        return res.Items;
+    } catch (error) {
+        console.error('Falling back to fetching from Anet', error);
+        return {};
+    }
+};

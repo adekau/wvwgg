@@ -9,7 +9,7 @@ import { MainNav } from './components/main-nav';
 import { ThemeProvider } from './components/theme-provider';
 import './globals.css';
 import MatchesProvider from './providers/matches-provider';
-import { getUserPreferences } from './util/user-preferences';
+import { getUserPreferences } from '../util/user-preferences';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',

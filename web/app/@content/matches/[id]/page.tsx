@@ -1,5 +1,5 @@
-import { getUserPreferences } from '@/app/util/user-preferences';
 import { ResizablePanel } from '@/components/ui/resizable';
+import { getUserPreferences } from '@/util/user-preferences';
 import { MatchId } from '@shared/interfaces/match-id.type';
 import { MatchDisplay } from '../components/match-display';
 
