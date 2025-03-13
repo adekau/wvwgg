@@ -16,14 +16,11 @@ function formatTier(id: MatchId): `${'NA' | 'EU'}-${string}` {
 
 function SortButton({ column, children }: { column: Column<IWorldTableRow>; children: ReactNode }) {
     return (
-        <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
             {children}
             <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-    )
+    );
 }
 
 export const worldTableColumns: ColumnDef<IWorldTableRow>[] = [
@@ -31,10 +28,9 @@ export const worldTableColumns: ColumnDef<IWorldTableRow>[] = [
         accessorKey: 'id',
         header: ({ column }) => <SortButton column={column}>Tier</SortButton>,
         cell: ({ row }) => {
-            const id: MatchId = (row.getValue('id'));
+            const id: MatchId = row.getValue('id');
             return formatTier(id);
-        },
-
+        }
     },
     {
         accessorFn: (r) => r.world.name,

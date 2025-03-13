@@ -1,5 +1,5 @@
 'use client';
-import { ResizablePanelGroup } from "@/components/ui/resizable";
+import { ResizablePanelGroup } from '@/components/ui/resizable';
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -12,5 +12,5 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
         >
             {children}
         </ResizablePanelGroup>
-    )
+    );
 }

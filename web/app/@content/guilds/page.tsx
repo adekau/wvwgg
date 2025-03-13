@@ -3,5 +3,5 @@ export default function GuildsContent() {
         <div>
             <pre></pre>
         </div>
-    )
+    );
 }

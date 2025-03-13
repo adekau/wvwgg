@@ -1,9 +1,9 @@
-import { ThemeToggle } from "@/app/components/theme-toggle";
-import { getUserPreferences } from "@/app/util/user-preferences";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from "@/components/ui/breadcrumb";
-import { ResizablePanel } from "@/components/ui/resizable";
-import { Separator } from "@/components/ui/separator";
-import WorldTable from "./components/world-table";
+import { ThemeToggle } from '@/app/components/theme-toggle';
+import { getUserPreferences } from '@/app/util/user-preferences';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
+import { ResizablePanel } from '@/components/ui/resizable';
+import { Separator } from '@/components/ui/separator';
+import WorldTable from './components/world-table';
 
 export default async function MatchesContent() {
     const { layout } = await getUserPreferences();
