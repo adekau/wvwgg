@@ -1,9 +1,17 @@
 'use client';
+import { bookmarkedGuildsAtom } from '@/app/providers/guilds-atom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ResizablePanel } from '@/components/ui/resizable';
 import { Separator } from '@/components/ui/separator';
+import { IFormattedGuild } from '@shared/interfaces/formatted-guild.interface';
+import { IWorld } from '@shared/interfaces/world.interface';
+import { useAtomValue } from 'jotai';
 import { Shield } from 'lucide-react';
+import RemoveBookmarkButton from './remove-bookmark-button';
 
-export default function GuildsPanel({ layout }: { layout: number[] }) {
+export default function GuildsPanel({ guilds, worlds, layout }: { guilds: IFormattedGuild[]; worlds: IWorld[]; layout: number[] }) {
+    const bookmarkedGuilds = useAtomValue(bookmarkedGuildsAtom);
+
     return (
         <ResizablePanel className="bg-sidebar" defaultSize={layout[1]} collapsible={true} collapsedSize={0} minSize={22} maxSize={32}>
             <div className="flex items-center px-4 py-2 h-[52px]">
@@ -13,7 +21,29 @@ export default function GuildsPanel({ layout }: { layout: number[] }) {
                 </h1>
             </div>
             <Separator className="mb-2" />
-            <div className="flex flex-col gap-2 p-4">Guilds sidebar placeholder (WIP)</div>
+            <div className="flex flex-col gap-2 p-2">
+                <p className="text-sm font-medium">Bookmarked Guilds</p>
+                {bookmarkedGuilds.length > 0 ? (
+                    bookmarkedGuilds.map((guildId) => {
+                        const guild = guilds.find((g) => g.id === guildId);
+                        return (
+                            <Card key={guildId}>
+                                <CardHeader className="flex flex-row items-center justify-between px-4 py-2">
+                                    <CardTitle>
+                                        [{guild?.tag}] {guild?.name}
+                                    </CardTitle>
+                                    <RemoveBookmarkButton guildId={guildId} />
+                                </CardHeader>
+                                <CardContent className="px-4">
+                                    <p>World</p>
+                                </CardContent>
+                            </Card>
+                        );
+                    })
+                ) : (
+                    <p className="text-sm font-medium text-muted-foreground">No bookmarked guilds.</p>
+                )}
+            </div>
         </ResizablePanel>
     );
 }

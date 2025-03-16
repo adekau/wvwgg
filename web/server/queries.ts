@@ -1,11 +1,14 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { unstable_cache } from 'next/cache';
+import { IFormattedGuild } from '@shared/interfaces/formatted-guild.interface';
 import { IFormattedMatch } from '@shared/interfaces/formatted-match.interface';
 import { MatchId } from '@shared/interfaces/match-id.type';
 import { IMatchResponse } from '@shared/interfaces/match-response.interface';
+import { formatGuilds } from '@shared/util/format-guilds';
 import { formatMatches } from '@shared/util/format-matches';
+import { unstable_cache } from 'next/cache';
 import j from './tmp-alliance-worlds.json' with { type: 'json' };
+import { IWorld } from '@shared/interfaces/world.interface';
 
 const STAGE = process.env.WVWGG_STAGE;
 const TABLE_NAME_LOCAL_DEV = process.env.TABLE_NAME_LOCAL_DEV;
@@ -66,7 +69,7 @@ export const getMatchesAnet = async () => {
 };
 
 export const getWorlds = unstable_cache(
-    async () => {
+    async (): Promise<IWorld[] | undefined> => {
         console.log('Getting worlds');
         try {
             return await db
@@ -91,28 +94,41 @@ export const getWorlds = unstable_cache(
     { revalidate: 60 * 60 * 10 }
 );
 
-export const getGuilds = async () => {
-    console.log('Getting guilds');
-    if (!TABLE_NAME) {
-        return undefined;
-    }
-    try {
-        const res = await db.query({
-            TableName: TABLE_NAME,
-            ExpressionAttributeNames: {
-                '#type': 'type',
-                '#data': 'data'
-            },
-            KeyConditionExpression: '#type = :type',
-            ExpressionAttributeValues: {
-                ':type': 'guild'
-            },
-            ProjectionExpression: '#type, #data',
-            Limit: 10
-        });
-        return res.Items;
-    } catch (error) {
-        console.error('Falling back to fetching from Anet', error);
-        return {};
-    }
+export const getAllianceWorlds = (): IWorld[] => {
+    return j as IWorld[];
 };
+
+export const getGuilds = unstable_cache(
+    (): Promise<IFormattedGuild[] | undefined> => {
+        console.log('Getting guilds');
+        if (!TABLE_NAME) {
+            return Promise.resolve(undefined);
+        }
+        const res = Promise.all([
+            db.query({
+                TableName: TABLE_NAME,
+                ExpressionAttributeNames: {
+                    '#type': 'type',
+                    '#data': 'data'
+                },
+                KeyConditionExpression: '#type = :type',
+                ExpressionAttributeValues: {
+                    ':type': 'guild'
+                },
+                ProjectionExpression: '#data'
+            }),
+            getWorlds()
+        ]);
+        return res
+            .then(([x, worlds]) => {
+                console.log('Formatting guilds', x.Items?.length, worlds?.length);
+                return formatGuilds(x.Items?.map((y) => y.data) ?? [], worlds ?? []);
+            })
+            .catch((e) => {
+                console.error('Error fetching guilds', e);
+                return undefined;
+            });
+    },
+    ['guilds'],
+    { revalidate: 60 * 60 * 24 }
+);

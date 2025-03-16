@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
 import { ClockIcon, ShieldIcon, SwordsIcon, Trophy } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Nav } from './nav';
 
 export function MainNav({
@@ -21,10 +21,6 @@ export function MainNav({
     const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
     const selectedMatch = useAtomValue(selectedMatchAtom);
     const pathname = usePathname();
-
-    useEffect(() => {
-        console.log(pathname);
-    }, [pathname]);
 
     return (
         <ResizablePanel

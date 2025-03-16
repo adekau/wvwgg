@@ -3,13 +3,14 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { Provider as JotaiProvider } from 'jotai';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { getMatches } from '../server/queries';
+import { getMatches, getWorlds } from '../server/queries';
+import { getUserPreferences } from '../util/user-preferences';
 import { MainLayout } from './components/main-layout';
 import { MainNav } from './components/main-nav';
 import { ThemeProvider } from './components/theme-provider';
 import './globals.css';
 import MatchesProvider from './providers/matches-provider';
-import { getUserPreferences } from '../util/user-preferences';
+import WorldsProvider from './providers/worlds-provider';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -34,13 +35,16 @@ export default async function RootLayout({
     content: React.ReactNode;
 }>) {
     const { layout, collapsed } = await getUserPreferences();
-    const matches = (await getMatches()) ?? {};
+    const matches = await getMatches();
+    const worlds = await getWorlds();
 
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}>
                 <JotaiProvider>
-                    <MatchesProvider matches={matches} />
+                    <MatchesProvider matches={matches ?? {}} />
+                    <WorldsProvider worlds={worlds ?? []} />
+
                     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                         <TooltipProvider delayDuration={0}>
                             <MainLayout>
