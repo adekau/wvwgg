@@ -9,8 +9,12 @@ export default function GuildsProvider({ guilds, bookmarkedGuilds }: { guilds: I
     const setBookmarkedGuilds = useSetAtom(bookmarkedGuildsAtom);
 
     useEffect(() => {
-        setGuilds(guilds ?? []);
-        setBookmarkedGuilds(bookmarkedGuilds ?? []);
+        if (guilds) {
+            setGuilds(guilds);
+        }
+        if (bookmarkedGuilds) {
+            setBookmarkedGuilds(bookmarkedGuilds);
+        }
     }, [guilds, bookmarkedGuilds, setGuilds, setBookmarkedGuilds]);
 
     return null;

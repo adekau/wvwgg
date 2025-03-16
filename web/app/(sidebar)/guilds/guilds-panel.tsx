@@ -4,12 +4,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ResizablePanel } from '@/components/ui/resizable';
 import { Separator } from '@/components/ui/separator';
 import { IFormattedGuild } from '@shared/interfaces/formatted-guild.interface';
-import { IWorld } from '@shared/interfaces/world.interface';
+import { IFormattedMatch } from '@shared/interfaces/formatted-match.interface';
 import { useAtomValue } from 'jotai';
 import { Shield } from 'lucide-react';
+import Link from 'next/link';
 import RemoveBookmarkButton from './remove-bookmark-button';
 
-export default function GuildsPanel({ guilds, worlds, layout }: { guilds: IFormattedGuild[]; worlds: IWorld[]; layout: number[] }) {
+export default function GuildsPanel({
+    guilds,
+    matches,
+    layout
+}: {
+    guilds: IFormattedGuild[];
+    matches: IFormattedMatch[];
+    layout: number[];
+}) {
     const bookmarkedGuilds = useAtomValue(bookmarkedGuildsAtom);
 
     return (
@@ -26,16 +35,24 @@ export default function GuildsPanel({ guilds, worlds, layout }: { guilds: IForma
                 {bookmarkedGuilds.length > 0 ? (
                     bookmarkedGuilds.map((guildId) => {
                         const guild = guilds.find((g) => g.id === guildId);
+                        if (!guild) return null;
+                        const match = matches.find(
+                            (m) =>
+                                m.green.world.id === guild.world.id ||
+                                m.blue.world.id === guild.world.id ||
+                                m.red.world.id === guild.world.id
+                        );
                         return (
                             <Card key={guildId}>
                                 <CardHeader className="flex flex-row items-center justify-between px-4 py-2">
                                     <CardTitle>
-                                        [{guild?.tag}] {guild?.name}
+                                        [{guild.tag}] {guild.name}
                                     </CardTitle>
                                     <RemoveBookmarkButton guildId={guildId} />
                                 </CardHeader>
                                 <CardContent className="px-4">
-                                    <p>World</p>
+                                    <p>{guild.world.name}</p>
+                                    <TierInfo match={match} />
                                 </CardContent>
                             </Card>
                         );
@@ -45,5 +62,16 @@ export default function GuildsPanel({ guilds, worlds, layout }: { guilds: IForma
                 )}
             </div>
         </ResizablePanel>
+    );
+}
+
+function TierInfo({ match }: { match?: IFormattedMatch }) {
+    if (!match) return null;
+    const [region, tier] = match.id.split('-');
+    const regionName = region === '1' ? 'NA' : 'EU';
+    return (
+        <Link href={`/matches/${match.id}`} className="text-sm text-muted-foreground hover:text-foreground">
+            {regionName} Tier {tier}
+        </Link>
     );
 }

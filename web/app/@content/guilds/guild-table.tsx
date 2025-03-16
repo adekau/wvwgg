@@ -4,6 +4,7 @@ import { bookmarkedGuildsAtom } from '@/app/providers/guilds-atom';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { IFormattedGuild } from '@shared/interfaces/formatted-guild.interface';
+import { IFormattedMatch } from '@shared/interfaces/formatted-match.interface';
 import { IWorld } from '@shared/interfaces/world.interface';
 import {
     ColumnFiltersState,
@@ -16,12 +17,20 @@ import {
     SortingState,
     useReactTable
 } from '@tanstack/react-table';
-import { useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
 import GuildSearch from './guild-search';
 import { guildTableColumns } from './guild-table-columns';
 
-export default function GuildTable({ guilds, worlds }: { guilds: IFormattedGuild[]; worlds: IWorld[] }) {
+export default function GuildTable({
+    guilds,
+    worlds,
+    matches
+}: {
+    guilds: IFormattedGuild[];
+    worlds: IWorld[];
+    matches: IFormattedMatch[];
+}) {
     'use no memo';
     const [sorting, setSorting] = useState<SortingState>([]);
     const [pagination, setPagination] = useState({
@@ -32,7 +41,7 @@ export default function GuildTable({ guilds, worlds }: { guilds: IFormattedGuild
     const [filterColumn, setFilterColumn] = useState<string>('name');
     const [searchGuildsValue, setSearchGuildsValue] = useState<string>('');
     const [filterWorld, setFilterWorld] = useState<string>('');
-    const bookmarkedGuilds = useAtomValue(bookmarkedGuildsAtom);
+    const [bookmarkedGuilds, setBookmarkedGuilds] = useAtom(bookmarkedGuildsAtom);
     const [rowSelection, setRowSelection] = useState<RowSelectionState>(
         bookmarkedGuilds.length > 0
             ? bookmarkedGuilds.reduce(
@@ -66,14 +75,18 @@ export default function GuildTable({ guilds, worlds }: { guilds: IFormattedGuild
     const table = useReactTable({
         data: guilds,
         getRowId: (row) => row.id,
-        columns: guildTableColumns,
+        columns: guildTableColumns(matches),
         getCoreRowModel: getCoreRowModel(),
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
         onPaginationChange: setPagination,
         getPaginationRowModel: getPaginationRowModel(),
         onColumnFiltersChange: setColumnFilters,
-        onRowSelectionChange: setRowSelection,
+        onRowSelectionChange: (r) => {
+            const next = typeof r === 'function' ? r(rowSelection) : r;
+            setRowSelection(next);
+            saveBookmarkedGuilds(next);
+        },
         getFilteredRowModel: getFilteredRowModel(),
         state: {
             sorting,
@@ -83,16 +96,17 @@ export default function GuildTable({ guilds, worlds }: { guilds: IFormattedGuild
         }
     });
 
+    function saveBookmarkedGuilds(next: RowSelectionState) {
+        const ids = Object.keys(next);
+        setBookmarkedGuilds(ids);
+        document.cookie = `bookmarkedGuilds=${JSON.stringify(ids)};path=/`;
+    }
+
     useEffect(() => {
         table.resetColumnFilters(true);
         table.getColumn(filterColumn)?.setFilterValue(searchGuildsValue);
         table.getColumn('World')?.setFilterValue(filterWorld);
     }, [filterColumn, filterWorld, searchGuildsValue]);
-
-    useEffect(() => {
-        const ids = table.getSelectedRowModel().flatRows.map((row) => row.id);
-        document.cookie = `bookmarkedGuilds=${JSON.stringify(ids)};path=/`;
-    }, [rowSelection]);
 
     return (
         <div className="max-w-7xl">

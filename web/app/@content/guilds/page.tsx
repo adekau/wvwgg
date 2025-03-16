@@ -2,7 +2,7 @@ import { ThemeToggle } from '@/app/components/theme-toggle';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from '@/components/ui/breadcrumb';
 import { ResizablePanel } from '@/components/ui/resizable';
 import { Separator } from '@/components/ui/separator';
-import { getAllianceWorlds, getGuilds } from '@/server/queries';
+import { getAllianceWorlds, getGuilds, getMatches } from '@/server/queries';
 import { getUserPreferences } from '@/util/user-preferences';
 import GuildTable from './guild-table';
 
@@ -10,6 +10,7 @@ export default async function GuildsContent() {
     const { layout } = await getUserPreferences();
     const guilds = await getGuilds();
     const worlds = getAllianceWorlds();
+    const matches = await getMatches();
 
     return (
         <ResizablePanel className="h-full" defaultSize={layout[2]} minSize={30}>
@@ -30,7 +31,7 @@ export default async function GuildsContent() {
                 </div>
                 <Separator />
                 <main className="m-4 h-screen overflow-y-auto">
-                    <GuildTable guilds={guilds ?? []} worlds={worlds ?? []} />
+                    <GuildTable guilds={guilds ?? []} worlds={worlds ?? []} matches={Object.values(matches ?? {})} />
                 </main>
             </div>
         </ResizablePanel>

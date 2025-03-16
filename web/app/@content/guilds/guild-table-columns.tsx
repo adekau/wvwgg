@@ -1,12 +1,13 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { IFormattedGuild } from '@shared/interfaces/formatted-guild.interface';
+import { IFormattedMatch } from '@shared/interfaces/formatted-match.interface';
 import { ColumnDef } from '@tanstack/react-table';
 import { BookmarkMinus, BookmarkPlus } from 'lucide-react';
 
 export interface IGuildTableRow extends IFormattedGuild {}
 
-export const guildTableColumns: ColumnDef<IGuildTableRow>[] = [
+export const guildTableColumns: (matches: IFormattedMatch[]) => ColumnDef<IGuildTableRow>[] = (matches) => [
     {
         header: 'Bookmark',
         cell: ({ row }) => {
@@ -31,5 +32,16 @@ export const guildTableColumns: ColumnDef<IGuildTableRow>[] = [
             return row.world.name;
         },
         header: 'World'
+    },
+    {
+        accessorFn: (row) => {
+            const worldId = row.world.id;
+            const match = Object.values(matches).find(
+                (m) => m.green.world.id === worldId || m.blue.world.id === worldId || m.red.world.id === worldId
+            );
+            const [region, tier] = match?.id.split('-') ?? [];
+            return `${region === '1' ? 'NA' : 'EU'} Tier ${tier}`;
+        },
+        header: 'Tier'
     }
 ];
